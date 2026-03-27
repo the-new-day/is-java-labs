@@ -12,6 +12,7 @@ public record CarModelDto(
         MoneyDto basePrice,
         CarBodyTypeDto carBodyType,
         FuelTypeDto fuelType,
+        DriveTypeDto driveType,
         double engineVolume,
         int enginePower,
         TransmissionTypeDto baseTransmissionType,

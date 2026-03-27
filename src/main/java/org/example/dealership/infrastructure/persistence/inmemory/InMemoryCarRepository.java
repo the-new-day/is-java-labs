@@ -1,6 +1,7 @@
 package org.example.dealership.infrastructure.persistence.inmemory;
 
 import org.example.dealership.domain.model.car.Car;
+import org.example.dealership.domain.model.carfilter.CarFilter;
 import org.example.dealership.domain.model.id.CarId;
 import org.example.dealership.application.port.out.persistence.CarRepository;
 
@@ -32,6 +33,13 @@ public class InMemoryCarRepository extends InMemoryRepository<CarId, Car> implem
     @Override
     public List<Car> findAll() {
         return super.findAll();
+    }
+
+    @Override
+    public List<Car> find(CarFilter filter) {
+        return findAll().stream()
+                .filter(filter::matches)
+                .toList();
     }
 
     @Override
