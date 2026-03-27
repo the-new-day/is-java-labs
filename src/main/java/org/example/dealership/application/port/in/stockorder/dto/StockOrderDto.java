@@ -2,10 +2,10 @@ package org.example.dealership.application.port.in.stockorder.dto;
 
 import java.util.UUID;
 
-public record StockCarOrderDto(
+public record StockOrderDto(
         UUID id,
         UUID clientId,
         UUID managerId,
         UUID carId,
-        StockCarOrderStatusDto status
+        StockOrderStatusDto status
 ) {}

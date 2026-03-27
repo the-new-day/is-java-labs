@@ -2,10 +2,12 @@ package org.example.dealership.application.port.in.stockorder;
 
 import org.example.dealership.application.port.in.stockorder.dto.StockOrderDto;
 
-public interface UpdateStockOrderUseCase {
+import java.util.List;
+
+public interface ListStockOrdersUseCase {
     Response execute(Request request);
 
-    record Request(StockOrderDto order) {}
+    record Request() {}
 
-    record Response() {}
+    record Response(List<StockOrderDto> order) {}
 }

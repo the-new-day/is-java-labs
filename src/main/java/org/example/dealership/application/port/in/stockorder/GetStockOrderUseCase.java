@@ -1,6 +1,6 @@
 package org.example.dealership.application.port.in.stockorder;
 
-import org.example.dealership.application.port.in.stockorder.dto.StockCarOrderDto;
+import org.example.dealership.application.port.in.stockorder.dto.StockOrderDto;
 
 import java.util.UUID;
 
@@ -9,5 +9,5 @@ public interface GetStockOrderUseCase {
 
     record Request(UUID id) {}
 
-    record Response(StockCarOrderDto order) {}
+    record Response(StockOrderDto order) {}
 }
