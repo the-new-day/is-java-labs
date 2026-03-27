@@ -1,4 +1,4 @@
-package org.example.dealership.domain.repository;
+package org.example.dealership.application.port.out.persistence;
 
 import org.example.dealership.domain.model.car.CarModel;
 import org.example.dealership.domain.model.id.BrandId;
