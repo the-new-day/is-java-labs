@@ -15,7 +15,7 @@ public class GetSparePartInteractor implements GetSparePartUseCase {
 
     @Override
     public Response execute(Request request) {
-        SparePartId partId = new SparePartId(request.id());
+        SparePartId partId = new SparePartId(request.sparePartId());
         return sparePartRepository.findById(partId)
                 .map(SparePartMapper::mapToSummaryDto)
                 .map(Response::new)

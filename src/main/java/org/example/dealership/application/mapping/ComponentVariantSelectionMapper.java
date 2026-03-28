@@ -1,7 +1,9 @@
 package org.example.dealership.application.mapping;
 
+import org.example.dealership.application.port.in.common.dto.ComponentVariantDto;
 import org.example.dealership.application.port.in.common.dto.ComponentVariantSelectionDto;
 import org.example.dealership.application.port.in.common.dto.ComponentTypeDto;
+import org.example.dealership.domain.model.configuration.ComponentVariant;
 import org.example.dealership.domain.model.configuration.ComponentVariantSelection;
 import org.example.dealership.domain.model.enums.ComponentType;
 
@@ -10,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class ComponentVariantSelectionMapper {
     public static ComponentVariantSelectionDto mapToDto(ComponentVariantSelection selection) {
-        map<ComponentTypeDto, org.example.dealership.application.port.in.common.dto.ComponentVariantDto> map =
+        Map<ComponentTypeDto, ComponentVariantDto> map =
                 selection.asMap().entrySet().stream()
                         .collect(Collectors.toUnmodifiableMap(
                                 entry -> ComponentTypeMapper.mapToDto(entry.getKey()),
@@ -20,7 +22,7 @@ public class ComponentVariantSelectionMapper {
     }
 
     public static ComponentVariantSelection mapFromDto(ComponentVariantSelectionDto dto) {
-        map<ComponentType, org.example.dealership.domain.model.configuration.ComponentVariant> map =
+        Map<ComponentType, ComponentVariant> map =
                 dto.selection().entrySet().stream()
                         .collect(Collectors.toUnmodifiableMap(
                                 entry -> ComponentTypeMapper.mapFromDto(entry.getKey()),
