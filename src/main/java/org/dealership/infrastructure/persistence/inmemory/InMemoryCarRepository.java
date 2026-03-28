@@ -1,5 +1,6 @@
 package org.dealership.infrastructure.persistence.inmemory;
 
+import org.dealership.domain.common.specification.Specification;
 import org.dealership.domain.model.car.Car;
 import org.dealership.domain.model.carfilter.CarFilter;
 import org.dealership.domain.model.id.CarId;
@@ -36,9 +37,9 @@ public class InMemoryCarRepository extends InMemoryRepository<CarId, Car> implem
     }
 
     @Override
-    public List<Car> find(CarFilter filter) {
+    public List<Car> findBySpec(Specification<Car> spec) {
         return findAll().stream()
-                .filter(filter::matches)
+                .filter(spec::isSatisfiedBy)
                 .toList();
     }
 

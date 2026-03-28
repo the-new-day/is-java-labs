@@ -1,14 +1,15 @@
 package org.dealership.domain.model.carfilter;
 
+import org.dealership.domain.common.specification.Specification;
 import org.dealership.domain.model.car.Car;
 
 import java.util.List;
 
 public class CarFilter {
-    private final List<CarSpecification> specs;
+    private final Specification<Car> spec;
 
-    public CarFilter(List<CarSpecification> specs) {
-        this.specs = specs;
+    public CarFilter(Specification<Car> spec) {
+        this.spec = spec;
     }
 
     public static CarFilterBuilder builder() {
@@ -16,7 +17,6 @@ public class CarFilter {
     }
 
     public boolean matches(Car car) {
-        return specs.stream()
-                .allMatch(spec -> spec.isSatisfiedBy(car));
+        return spec.isSatisfiedBy(car);
     }
 }

@@ -17,9 +17,8 @@ public class ListCarsInteractor implements ListCarsUseCase {
     @Override
     public Response execute(Request request) {
         CarFilterDto dto = request.filter();
-        CarFilter filter = CarFilterMapper.mapFromDto(dto);
         return new Response(
-                carRepository.find(filter).stream()
+                carRepository.findBySpec(CarFilterMapper.mapSpecFromDto(dto)).stream()
                         .map(CarMapper::mapCarToSummaryDto)
                         .toList()
         );

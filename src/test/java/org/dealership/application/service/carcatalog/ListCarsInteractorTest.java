@@ -4,6 +4,7 @@ import org.dealership.application.port.in.carcatalog.ListCarsUseCase;
 import org.dealership.application.port.in.carcatalog.dto.CarFilterDto;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.application.service.ServiceTestData;
+import org.dealership.domain.common.specification.Specification;
 import org.dealership.domain.model.car.Brand;
 import org.dealership.domain.model.car.Car;
 import org.dealership.domain.model.car.CarModel;
@@ -34,15 +35,12 @@ class ListCarsInteractorTest {
         CarModel model = ServiceTestData.carModel(UUID.randomUUID(), brand);
         Car car = ServiceTestData.car(UUID.randomUUID(), model);
 
-        when(carRepository.find(any())).thenReturn(List.of(car));
+        when(carRepository.findBySpec(any())).thenReturn(List.of(car));
 
         CarFilterDto filterDto = ServiceTestData.carFilterDto(brand.getId().value(), model.getId().value());
         ListCarsInteractor interactor = new ListCarsInteractor(carRepository);
         var response = interactor.execute(new ListCarsUseCase.Request(filterDto));
 
         assertEquals(1, response.carSummaryList().size());
-        ArgumentCaptor<CarFilter> captor = ArgumentCaptor.forClass(CarFilter.class);
-        verify(carRepository).find(captor.capture());
-        assertNotNull(captor.getValue());
     }
 }

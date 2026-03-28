@@ -1,5 +1,7 @@
 package org.dealership.domain.model.carfilter;
 
+import org.dealership.domain.common.specification.Specification;
+import org.dealership.domain.model.car.Car;
 import org.dealership.domain.model.carfilter.spec.*;
 import org.dealership.domain.model.enums.*;
 import org.dealership.domain.model.id.BrandId;
@@ -10,10 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarFilterBuilder {
-    private final List<CarSpecification> specs = new ArrayList<>();
+    private final List<Specification<Car>> specs = new ArrayList<>();
 
     public CarFilter build() {
-        return new CarFilter(specs);
+        if (specs.isEmpty()) {
+            return null;
+        }
+
+        return new CarFilter(buildSpec());
+    }
+
+    public Specification<Car> buildSpec() {
+        Specification<Car> result = specs.getFirst();
+        for (int i = 1; i < specs.size(); i++) {
+            result = result.and(specs.get(i));
+        }
+        return result;
     }
 
     public CarFilterBuilder priceRange(Money minPrice, Money maxPrice) {

@@ -1,7 +1,7 @@
 package org.dealership.application.port.out.persistence;
 
+import org.dealership.domain.common.specification.Specification;
 import org.dealership.domain.model.car.Car;
-import org.dealership.domain.model.carfilter.CarFilter;
 import org.dealership.domain.model.id.CarId;
 
 import java.util.List;
@@ -12,6 +12,6 @@ public interface CarRepository {
     void save(Car car);
     Optional<Car> findById(CarId id);
     List<Car> findAll();
-    List<Car> find(CarFilter filter);
+    List<Car> findBySpec(Specification<Car> spec);
     void deleteById(CarId id);
 }
