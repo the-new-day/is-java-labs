@@ -30,7 +30,7 @@ public class AddCarInteractor implements AddCarUseCase {
         CarModel model = carModelRepository.findById(modelId)
                 .orElseThrow(() -> new EntityNotFoundException("Car model not found: " + modelId));
         CarId carId = carRepository.nextId();
-        Car car = CarMapper.mapFromNewDto(dto, carId, model);
+        Car car = CarMapper.mapFromNewDto(dto, carId, model, false);
         carRepository.save(car);
         return new Response(carId.value());
     }

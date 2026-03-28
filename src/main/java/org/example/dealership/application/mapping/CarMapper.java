@@ -38,10 +38,6 @@ public class CarMapper {
         );
     }
 
-    public static Car mapFromNewDto(NewCarDetailsDto dto, CarId id, CarModel model) {
-        return mapFromNewDto(dto, id, model, false);
-    }
-
     public static Car mapFromNewDto(
             NewCarDetailsDto dto,
             CarId id,
