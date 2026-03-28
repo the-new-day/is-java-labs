@@ -7,7 +7,7 @@ import org.dealership.application.port.out.persistence.UserRepository;
 import org.dealership.domain.exception.EntityNotFoundException;
 import org.dealership.domain.model.id.CarId;
 import org.dealership.domain.model.id.UserId;
-import org.dealership.domain.model.order.UserSelectionStrategy;
+import org.dealership.domain.model.user.UserSelectionStrategy;
 import org.dealership.domain.model.order.StockCarOrder;
 import org.dealership.domain.model.order.state.StockCarOrderStatus;
 import org.dealership.domain.model.user.User;

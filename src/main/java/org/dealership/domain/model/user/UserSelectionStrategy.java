@@ -1,4 +1,4 @@
-package org.dealership.domain.model.order;
+package org.dealership.domain.model.user;
 
 import org.dealership.domain.model.id.UserId;
 

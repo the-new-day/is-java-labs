@@ -9,7 +9,7 @@ import org.dealership.domain.model.car.Brand;
 import org.dealership.domain.model.car.CarModel;
 import org.dealership.domain.model.id.CarModelId;
 import org.dealership.domain.model.id.OrderId;
-import org.dealership.domain.model.order.UserSelectionStrategy;
+import org.dealership.domain.model.user.UserSelectionStrategy;
 import org.dealership.domain.model.user.User;
 import org.dealership.domain.model.user.UserRole;
 import org.junit.jupiter.api.Test;

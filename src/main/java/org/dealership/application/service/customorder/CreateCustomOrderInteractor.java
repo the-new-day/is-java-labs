@@ -12,7 +12,7 @@ import org.dealership.domain.model.configuration.Configuration;
 import org.dealership.domain.model.id.CarModelId;
 import org.dealership.domain.model.id.UserId;
 import org.dealership.domain.model.order.CustomCarOrder;
-import org.dealership.domain.model.order.UserSelectionStrategy;
+import org.dealership.domain.model.user.UserSelectionStrategy;
 import org.dealership.domain.model.order.state.CustomCarOrderStatus;
 import org.dealership.domain.model.user.User;
 import org.dealership.domain.model.user.UserRole;
