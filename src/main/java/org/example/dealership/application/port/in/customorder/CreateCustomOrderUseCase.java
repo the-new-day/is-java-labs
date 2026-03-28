@@ -9,7 +9,6 @@ public interface CreateCustomOrderUseCase {
 
     record Request(
             UUID clientId,
-            UUID managerId,
             ConfigurationDto configuration
     ) {}
 

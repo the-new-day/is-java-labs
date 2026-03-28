@@ -6,7 +6,6 @@ public interface CreateStockOrderUseCase {
     Response execute(Request request);
 
     record Request(UUID clientId,
-                   UUID managerId,
                    UUID carId) {}
 
     record Response(UUID id) {}
