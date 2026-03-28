@@ -3,6 +3,8 @@ package org.example.dealership.application.mapping;
 import org.example.dealership.application.port.in.carcatalog.dto.ModelSummaryDto;
 import org.example.dealership.application.port.in.common.dto.CarModelDto;
 import org.example.dealership.application.port.in.common.dto.ComponentTypeDto;
+import org.example.dealership.application.port.in.inventory.dto.NewModelDto;
+import org.example.dealership.domain.model.car.Brand;
 import org.example.dealership.domain.model.car.CarModel;
 import org.example.dealership.domain.model.enums.ComponentType;
 import org.example.dealership.domain.model.id.CarModelId;
@@ -51,6 +53,23 @@ public class CarModelMapper {
                 BrandMapper.mapToDto(model.getBrand()),
                 model.getModelName(),
                 MoneyMapper.mapToDto(model.getBasePrice())
+        );
+    }
+
+    public static CarModel mapFromNewDto(NewModelDto dto, CarModelId id, Brand brand) {
+        return new CarModel(
+                id,
+                brand,
+                dto.name(),
+                MoneyMapper.mapFromDto(dto.basePrice()),
+                CarBodyTypeMapper.mapFromDto(dto.carBodyType()),
+                FuelTypeMapper.mapFromDto(dto.fuelType()),
+                DriveTypeMapper.mapFromDto(dto.driveType()),
+                dto.engineVolume(),
+                dto.enginePower(),
+                TransmissionTypeMapper.mapFromDto(dto.baseTransmissionType()),
+                ComponentVariantSelectionMapper.mapFromDto(dto.baseComponentSelection()),
+                mapComponentTypesFromDto(dto.configurableComponentTypes())
         );
     }
 

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public abstract class InMemoryRepository<ID, T> {
-    protected final map<ID, T> storage = new HashMap<>();
+    protected final Map<ID, T> storage = new HashMap<>();
 
     protected abstract ID getId(T entity);
 
