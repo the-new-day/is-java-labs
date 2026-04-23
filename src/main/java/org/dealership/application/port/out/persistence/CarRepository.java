@@ -1,6 +1,6 @@
 package org.dealership.application.port.out.persistence;
 
-import org.dealership.domain.common.specification.Specification;
+import org.dealership.domain.specification.Specification;
 import org.dealership.domain.model.car.Car;
 import org.dealership.domain.model.id.CarId;
 

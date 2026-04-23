@@ -1,9 +1,7 @@
 package org.dealership.domain.model.carfilter;
 
-import org.dealership.domain.common.specification.Specification;
+import org.dealership.domain.specification.Specification;
 import org.dealership.domain.model.car.Car;
-
-import java.util.List;
 
 public class CarFilter {
     private final Specification<Car> spec;

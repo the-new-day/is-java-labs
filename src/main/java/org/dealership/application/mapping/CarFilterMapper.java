@@ -1,7 +1,7 @@
 package org.dealership.application.mapping;
 
 import org.dealership.application.port.in.carcatalog.dto.CarFilterDto;
-import org.dealership.domain.common.specification.Specification;
+import org.dealership.domain.specification.Specification;
 import org.dealership.domain.model.car.Car;
 import org.dealership.domain.model.carfilter.CarFilter;
 import org.dealership.domain.model.id.BrandId;

@@ -4,14 +4,11 @@ import org.dealership.application.port.in.carcatalog.ListCarsUseCase;
 import org.dealership.application.port.in.carcatalog.dto.CarFilterDto;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.application.service.ServiceTestData;
-import org.dealership.domain.common.specification.Specification;
 import org.dealership.domain.model.car.Brand;
 import org.dealership.domain.model.car.Car;
 import org.dealership.domain.model.car.CarModel;
-import org.dealership.domain.model.carfilter.CarFilter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 

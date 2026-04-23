@@ -1,4 +1,4 @@
-package org.dealership.domain.common.specification;
+package org.dealership.domain.specification;
 
 public interface Specification<T> {
     boolean isSatisfiedBy(T item);
