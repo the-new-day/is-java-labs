@@ -1,0 +1,317 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-seed-data
+      author: the-new-day
+      changes:
+        - insert:
+            tableName: brands
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000001" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: name, value: "BMW" }
+
+        - insert:
+            tableName: car_models
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000101" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: brand_id, value: "00000000-0000-0000-0000-000000000001" }
+              - column: { name: model_name, value: "320i" }
+              - column: { name: base_price, valueNumeric: 3500000.00 }
+              - column: { name: body_type, value: "SEDAN" }
+              - column: { name: fuel_type, value: "PETROL" }
+              - column: { name: drive_type, value: "REAR" }
+              - column: { name: engine_volume, valueNumeric: 2.0 }
+              - column: { name: engine_power, valueNumeric: 184 }
+              - column: { name: base_transmission_type, value: "AUTOMATIC" }
+        - insert:
+            tableName: car_models
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000102" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: brand_id, value: "00000000-0000-0000-0000-000000000001" }
+              - column: { name: model_name, value: "330i" }
+              - column: { name: base_price, valueNumeric: 4200000.00 }
+              - column: { name: body_type, value: "SEDAN" }
+              - column: { name: fuel_type, value: "PETROL" }
+              - column: { name: drive_type, value: "REAR" }
+              - column: { name: engine_volume, valueNumeric: 2.0 }
+              - column: { name: engine_power, valueNumeric: 258 }
+              - column: { name: base_transmission_type, value: "AUTOMATIC" }
+        - insert:
+            tableName: car_models
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000103" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: brand_id, value: "00000000-0000-0000-0000-000000000001" }
+              - column: { name: model_name, value: "M340i" }
+              - column: { name: base_price, valueNumeric: 6200000.00 }
+              - column: { name: body_type, value: "SEDAN" }
+              - column: { name: fuel_type, value: "PETROL" }
+              - column: { name: drive_type, value: "ALL_WHEEL" }
+              - column: { name: engine_volume, valueNumeric: 3.0 }
+              - column: { name: engine_power, valueNumeric: 374 }
+              - column: { name: base_transmission_type, value: "AUTOMATIC" }
+
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000201" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "WHEELS" }
+              - column: { name: name, value: "17 Standard" }
+              - column: { name: surcharge, valueNumeric: 0.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000202" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "TRANSMISSION" }
+              - column: { name: name, value: "Automatic 8AT" }
+              - column: { name: surcharge, valueNumeric: 0.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000203" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "STEERING_WHEEL" }
+              - column: { name: name, value: "Sport Leather Standard" }
+              - column: { name: surcharge, valueNumeric: 0.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000204" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "INTERIOR" }
+              - column: { name: name, value: "Graphite Fabric" }
+              - column: { name: surcharge, valueNumeric: 0.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000205" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "WHEELS" }
+              - column: { name: name, value: "19 M-Sport" }
+              - column: { name: surcharge, valueNumeric: 95000.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000206" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "WHEELS" }
+              - column: { name: name, value: "18 Aero" }
+              - column: { name: surcharge, valueNumeric: 45000.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000207" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "TRANSMISSION" }
+              - column: { name: name, value: "Manual 6MT" }
+              - column: { name: surcharge, valueNumeric: -30000.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000208" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "STEERING_WHEEL" }
+              - column: { name: name, value: "M-Sport Heated" }
+              - column: { name: surcharge, valueNumeric: 25000.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000209" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "INTERIOR" }
+              - column: { name: name, value: "Dakota Leather" }
+              - column: { name: surcharge, valueNumeric: 110000.00 }
+        - insert:
+            tableName: component_variants
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000210" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: component_type, value: "INTERIOR" }
+              - column: { name: name, value: "Performance Sport" }
+              - column: { name: surcharge, valueNumeric: 160000.00 }
+
+  - changeSet:
+      id: 004-seed-compatibility-and-base-configurations
+      author: the-new-day
+      changes:
+        - sql:
+            sql: |
+              insert into component_variant_compatible_models (id, created_at, updated_at, removed, component_variant_id, car_model_id) values
+              ('00000000-0000-0000-0000-000000000701', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000201', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000702', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000202', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000703', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000202', '00000000-0000-0000-0000-000000000102'),
+              ('00000000-0000-0000-0000-000000000704', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000203', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000705', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000203', '00000000-0000-0000-0000-000000000102'),
+              ('00000000-0000-0000-0000-000000000706', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000204', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000707', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000205', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000708', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000205', '00000000-0000-0000-0000-000000000102'),
+              ('00000000-0000-0000-0000-000000000709', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000205', '00000000-0000-0000-0000-000000000103'),
+              ('00000000-0000-0000-0000-000000000710', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000206', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000711', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000206', '00000000-0000-0000-0000-000000000102'),
+              ('00000000-0000-0000-0000-000000000712', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000207', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000713', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000207', '00000000-0000-0000-0000-000000000102'),
+              ('00000000-0000-0000-0000-000000000714', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000208', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000715', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000208', '00000000-0000-0000-0000-000000000102'),
+              ('00000000-0000-0000-0000-000000000716', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000208', '00000000-0000-0000-0000-000000000103'),
+              ('00000000-0000-0000-0000-000000000717', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000209', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000718', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000209', '00000000-0000-0000-0000-000000000102'),
+              ('00000000-0000-0000-0000-000000000719', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000210', '00000000-0000-0000-0000-000000000102'),
+              ('00000000-0000-0000-0000-000000000720', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000210', '00000000-0000-0000-0000-000000000103');
+
+        - sql:
+            sql: |
+              insert into car_model_base_component_variants (id, created_at, updated_at, removed, car_model_id, component_type, component_variant_id) values
+              ('00000000-0000-0000-0000-000000000801', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000101', 'WHEELS', '00000000-0000-0000-0000-000000000201'),
+              ('00000000-0000-0000-0000-000000000802', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000101', 'TRANSMISSION', '00000000-0000-0000-0000-000000000202'),
+              ('00000000-0000-0000-0000-000000000803', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000101', 'STEERING_WHEEL', '00000000-0000-0000-0000-000000000203'),
+              ('00000000-0000-0000-0000-000000000804', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000101', 'INTERIOR', '00000000-0000-0000-0000-000000000204'),
+              ('00000000-0000-0000-0000-000000000805', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000102', 'WHEELS', '00000000-0000-0000-0000-000000000206'),
+              ('00000000-0000-0000-0000-000000000806', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000102', 'TRANSMISSION', '00000000-0000-0000-0000-000000000202'),
+              ('00000000-0000-0000-0000-000000000807', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000102', 'STEERING_WHEEL', '00000000-0000-0000-0000-000000000203'),
+              ('00000000-0000-0000-0000-000000000808', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000102', 'INTERIOR', '00000000-0000-0000-0000-000000000209');
+
+        - sql:
+            sql: |
+              insert into car_model_configurable_component_types (id, created_at, updated_at, removed, car_model_id, component_type) values
+              ('00000000-0000-0000-0000-000000000901', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000101', 'WHEELS'),
+              ('00000000-0000-0000-0000-000000000902', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000101', 'TRANSMISSION'),
+              ('00000000-0000-0000-0000-000000000903', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000101', 'STEERING_WHEEL'),
+              ('00000000-0000-0000-0000-000000000904', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000101', 'INTERIOR'),
+              ('00000000-0000-0000-0000-000000000905', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000102', 'WHEELS'),
+              ('00000000-0000-0000-0000-000000000906', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000102', 'TRANSMISSION'),
+              ('00000000-0000-0000-0000-000000000907', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000102', 'STEERING_WHEEL'),
+              ('00000000-0000-0000-0000-000000000908', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000102', 'INTERIOR');
+
+  - changeSet:
+      id: 005-seed-operational-data
+      author: the-new-day
+      changes:
+        - sql:
+            sql: |
+              insert into users (id, created_at, updated_at, removed, full_name, role) values
+              ('00000000-0000-0000-0000-000000000301', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, 'Ivan Petrov', 'CLIENT'),
+              ('00000000-0000-0000-0000-000000000302', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, 'Maria Manager', 'MANAGER'),
+              ('00000000-0000-0000-0000-000000000303', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, 'Oleg Warehouse', 'WAREHOUSE_ADMIN'),
+              ('00000000-0000-0000-0000-000000000304', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, 'Anna Admin', 'SYSTEM_ADMIN');
+
+        - insert:
+            tableName: configurations
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000401" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: car_model_id, value: "00000000-0000-0000-0000-000000000101" }
+        - insert:
+            tableName: configurations
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000402" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: car_model_id, value: "00000000-0000-0000-0000-000000000101" }
+
+        - sql:
+            sql: |
+              insert into configuration_component_variants (id, created_at, updated_at, removed, configuration_id, component_type, component_variant_id) values
+              ('00000000-0000-0000-0000-000000000601', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000401', 'WHEELS', '00000000-0000-0000-0000-000000000205'),
+              ('00000000-0000-0000-0000-000000000602', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000401', 'TRANSMISSION', '00000000-0000-0000-0000-000000000202'),
+              ('00000000-0000-0000-0000-000000000603', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000401', 'STEERING_WHEEL', '00000000-0000-0000-0000-000000000208'),
+              ('00000000-0000-0000-0000-000000000604', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000401', 'INTERIOR', '00000000-0000-0000-0000-000000000209'),
+              ('00000000-0000-0000-0000-000000000605', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000402', 'WHEELS', '00000000-0000-0000-0000-000000000206'),
+              ('00000000-0000-0000-0000-000000000606', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000402', 'TRANSMISSION', '00000000-0000-0000-0000-000000000202'),
+              ('00000000-0000-0000-0000-000000000607', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000402', 'STEERING_WHEEL', '00000000-0000-0000-0000-000000000203'),
+              ('00000000-0000-0000-0000-000000000608', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000402', 'INTERIOR', '00000000-0000-0000-0000-000000000204');
+
+        - insert:
+            tableName: cars
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000501" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: vin, value: "WBA8E9G50JNU12345" }
+              - column: { name: configuration_id, value: "00000000-0000-0000-0000-000000000401" }
+              - column: { name: color, value: "BLACK" }
+              - column: { name: test_drive_available, valueBoolean: true }
+
+        - insert:
+            tableName: spare_parts
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000551" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: name, value: "BMW Brake Pads Set" }
+              - column: { name: price, valueNumeric: 28000.00 }
+        - sql:
+            sql: |
+              insert into spare_part_compatible_models (id, created_at, updated_at, removed, spare_part_id, car_model_id) values
+              ('00000000-0000-0000-0000-000000000552', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000551', '00000000-0000-0000-0000-000000000101'),
+              ('00000000-0000-0000-0000-000000000553', '2026-05-05T00:00:00Z', '2026-05-05T00:00:00Z', false, '00000000-0000-0000-0000-000000000551', '00000000-0000-0000-0000-000000000102');
+
+        - insert:
+            tableName: stock_car_orders
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000651" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: client_id, value: "00000000-0000-0000-0000-000000000301" }
+              - column: { name: manager_id, value: "00000000-0000-0000-0000-000000000302" }
+              - column: { name: car_id, value: "00000000-0000-0000-0000-000000000501" }
+              - column: { name: status, value: "PLACED" }
+        - insert:
+            tableName: custom_car_orders
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000652" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: client_id, value: "00000000-0000-0000-0000-000000000301" }
+              - column: { name: manager_id, value: "00000000-0000-0000-0000-000000000302" }
+              - column: { name: configuration_id, value: "00000000-0000-0000-0000-000000000402" }
+              - column: { name: status, value: "PLACED" }
+        - insert:
+            tableName: test_drive_requests
+            columns:
+              - column: { name: id, value: "00000000-0000-0000-0000-000000000653" }
+              - column: { name: created_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: updated_at, value: "2026-05-05 00:00:00+00" }
+              - column: { name: removed, valueBoolean: false }
+              - column: { name: client_id, value: "00000000-0000-0000-0000-000000000301" }
+              - column: { name: car_id, value: "00000000-0000-0000-0000-000000000501" }
+              - column: { name: starts_at, value: "2026-05-06 10:00:00" }
+
