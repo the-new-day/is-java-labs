@@ -1,7 +1,7 @@
 package org.dealership.application.service.carcatalog;
 
 import org.dealership.application.mapping.CarMapper;
-import org.dealership.application.port.in.inventory.GetCarUseCase;
+import org.dealership.application.port.in.carcatalog.GetCarUseCase;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.domain.exception.EntityNotFoundException;
 import org.dealership.domain.model.car.Car;
