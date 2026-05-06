@@ -36,11 +36,11 @@ public class UserJpaEntity extends BaseJpaEntity {
         return role;
     }
 
-    public void changeFullName(String fullName) {
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
-    public void changeRole(UserRole role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,6 +15,8 @@ public interface ComponentVariantJpaRepository extends JpaRepository<ComponentVa
     Optional<ComponentVariantJpaEntity> findByIdAndRemovedFalse(UUID id);
 
     List<ComponentVariantJpaEntity> findAllByRemovedFalse();
+
+    List<ComponentVariantJpaEntity> findAllByIdInAndRemovedFalse(Collection<UUID> ids);
 
     @Query("""
             select distinct variant

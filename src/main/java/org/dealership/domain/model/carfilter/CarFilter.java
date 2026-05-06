@@ -1,20 +1,21 @@
 package org.dealership.domain.model.carfilter;
 
-import org.dealership.domain.specification.Specification;
-import org.dealership.domain.model.car.Car;
+import org.dealership.domain.model.enums.*;
+import org.dealership.domain.model.id.BrandId;
+import org.dealership.domain.model.id.CarModelId;
+import org.dealership.domain.model.vo.Money;
 
-public class CarFilter {
-    private final Specification<Car> spec;
-
-    public CarFilter(Specification<Car> spec) {
-        this.spec = spec;
-    }
-
-    public static CarFilterBuilder builder() {
-        return new CarFilterBuilder();
-    }
-
-    public boolean matches(Car car) {
-        return spec.isSatisfiedBy(car);
-    }
-}
+public record CarFilter(
+        Money minPrice,
+        Money maxPrice,
+        CarBodyType bodyType,
+        BrandId brand,
+        Color color,
+        CarModelId model,
+        DriveType driveType,
+        Integer minEnginePower,
+        Integer maxEnginePower,
+        Double minEngineVolume,
+        Double maxEngineVolume,
+        FuelType fuelType
+) {}

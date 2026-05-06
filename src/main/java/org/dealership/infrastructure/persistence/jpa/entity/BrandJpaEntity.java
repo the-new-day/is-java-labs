@@ -24,7 +24,7 @@ public class BrandJpaEntity extends BaseJpaEntity {
         return name;
     }
 
-    public void rename(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 }
