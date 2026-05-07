@@ -1,5 +1,6 @@
 package org.dealership.infrastructure.config;
 
+import org.dealership.application.mapper.TestDriveRequestMapper;
 import org.dealership.application.port.in.testdrive.CreateTestDriveRequestUseCase;
 import org.dealership.application.port.in.testdrive.DeleteTestDriveRequestUseCase;
 import org.dealership.application.port.in.testdrive.GetTestDriveRequestUseCase;
@@ -37,16 +38,18 @@ public class TestDriveUseCaseConfig {
 
     @Bean
     public GetTestDriveRequestUseCase getTestDriveRequestUseCase(
-            TestDriveRequestRepository testDriveRequestRepository
+            TestDriveRequestRepository testDriveRequestRepository,
+            TestDriveRequestMapper testDriveRequestMapper
     ) {
-        return new GetTestDriveRequestInteractor(testDriveRequestRepository);
+        return new GetTestDriveRequestInteractor(testDriveRequestRepository, testDriveRequestMapper);
     }
 
     @Bean
     public ListTestDriveRequestsUseCase listTestDriveRequestsUseCase(
-            TestDriveRequestRepository testDriveRequestRepository
+            TestDriveRequestRepository testDriveRequestRepository,
+            TestDriveRequestMapper testDriveRequestMapper
     ) {
-        return new ListTestDriveRequestsInteractor(testDriveRequestRepository);
+        return new ListTestDriveRequestsInteractor(testDriveRequestRepository, testDriveRequestMapper);
     }
 
     @Bean
@@ -58,8 +61,9 @@ public class TestDriveUseCaseConfig {
 
     @Bean
     public UpdateTestDriveRequestUseCase updateTestDriveRequestUseCase(
-            TestDriveRequestRepository testDriveRequestRepository
+            TestDriveRequestRepository testDriveRequestRepository,
+            TestDriveRequestMapper testDriveRequestMapper
     ) {
-        return new UpdateTestDriveRequestInteractor(testDriveRequestRepository);
+        return new UpdateTestDriveRequestInteractor(testDriveRequestRepository, testDriveRequestMapper);
     }
 }

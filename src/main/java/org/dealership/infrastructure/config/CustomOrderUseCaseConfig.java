@@ -1,5 +1,6 @@
 package org.dealership.infrastructure.config;
 
+import org.dealership.application.mapper.ConfigurationMapper;
 import org.dealership.application.port.in.customorder.CreateCustomOrderUseCase;
 import org.dealership.application.port.in.customorder.DeleteCustomOrderUseCase;
 import org.dealership.application.port.in.customorder.GetCustomOrderUseCase;
@@ -25,13 +26,15 @@ public class CustomOrderUseCaseConfig {
             CustomCarOrderRepository customCarOrderRepository,
             CarModelRepository carModelRepository,
             UserRepository userRepository,
-            UserSelectionStrategy userSelectionStrategy
+            UserSelectionStrategy userSelectionStrategy,
+            ConfigurationMapper configurationMapper
     ) {
         return new CreateCustomOrderInteractor(
                 customCarOrderRepository,
                 carModelRepository,
                 userRepository,
-                userSelectionStrategy);
+                userSelectionStrategy,
+                configurationMapper);
     }
 
     @Bean

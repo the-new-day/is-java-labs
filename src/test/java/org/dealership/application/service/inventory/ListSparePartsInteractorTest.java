@@ -28,6 +28,6 @@ class ListSparePartsInteractorTest {
         ListSparePartsInteractor interactor = new ListSparePartsInteractor(sparePartRepository);
         var response = interactor.execute(new ListSparePartsUseCase.Request());
 
-        assertEquals(1, response.sparePartSummaryList().size());
+        assertEquals(1, response.sparePartSummaryDtoList().size());
     }
 }

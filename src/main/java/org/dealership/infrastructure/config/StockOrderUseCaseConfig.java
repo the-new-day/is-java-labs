@@ -1,5 +1,7 @@
 package org.dealership.infrastructure.config;
 
+import org.dealership.application.mapper.StockOrderMapper;
+import org.dealership.application.mapper.StockOrderStatusMapper;
 import org.dealership.application.port.in.stockorder.CreateStockOrderUseCase;
 import org.dealership.application.port.in.stockorder.DeleteStockOrderUseCase;
 import org.dealership.application.port.in.stockorder.GetStockOrderUseCase;
@@ -40,17 +42,17 @@ public class StockOrderUseCaseConfig {
     }
 
     @Bean
-    public GetStockOrderUseCase getStockOrderUseCase(StockCarOrderRepository stockCarOrderRepository) {
-        return new GetStockOrderInteractor(stockCarOrderRepository);
+    public GetStockOrderUseCase getStockOrderUseCase(StockCarOrderRepository stockCarOrderRepository, StockOrderMapper stockOrderMapper) {
+        return new GetStockOrderInteractor(stockCarOrderRepository, stockOrderMapper);
     }
 
     @Bean
-    public ListStockOrdersUseCase listStockOrdersUseCase(StockCarOrderRepository stockCarOrderRepository) {
-        return new ListStockOrdersInteractor(stockCarOrderRepository);
+    public ListStockOrdersUseCase listStockOrdersUseCase(StockCarOrderRepository stockCarOrderRepository, StockOrderMapper stockOrderMapper) {
+        return new ListStockOrdersInteractor(stockCarOrderRepository, stockOrderMapper);
     }
 
     @Bean
-    public UpdateStockOrderUseCase updateStockOrderUseCase(StockCarOrderRepository stockCarOrderRepository) {
-        return new UpdateStockOrderInteractor(stockCarOrderRepository);
+    public UpdateStockOrderUseCase updateStockOrderUseCase(StockCarOrderRepository stockCarOrderRepository, StockOrderStatusMapper stockOrderStatusMapper) {
+        return new UpdateStockOrderInteractor(stockCarOrderRepository, stockOrderStatusMapper);
     }
 }

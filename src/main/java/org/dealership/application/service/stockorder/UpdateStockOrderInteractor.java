@@ -1,6 +1,6 @@
 package org.dealership.application.service.stockorder;
 
-import org.dealership.application.mapping.StockOrderStatusMapper;
+import org.dealership.application.mapper.StockOrderStatusMapper;
 import org.dealership.application.port.in.stockorder.UpdateStockOrderUseCase;
 import org.dealership.application.port.in.stockorder.dto.StockOrderDto;
 import org.dealership.application.port.out.persistence.StockCarOrderRepository;
@@ -12,9 +12,11 @@ import org.dealership.domain.model.order.state.StockCarOrderStatus;
 
 public class UpdateStockOrderInteractor implements UpdateStockOrderUseCase {
     private final StockCarOrderRepository stockOrderRepository;
+    private final StockOrderStatusMapper stockOrderStatusMapper;
 
-    public UpdateStockOrderInteractor(StockCarOrderRepository stockOrderRepository) {
+    public UpdateStockOrderInteractor(StockCarOrderRepository stockOrderRepository, StockOrderStatusMapper stockOrderStatusMapper) {
         this.stockOrderRepository = stockOrderRepository;
+        this.stockOrderStatusMapper = stockOrderStatusMapper;
     }
 
     @Override
@@ -23,7 +25,7 @@ public class UpdateStockOrderInteractor implements UpdateStockOrderUseCase {
         OrderId orderId = new OrderId(dto.id());
         StockCarOrder order = stockOrderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Stock order not found: " + orderId));
-        StockCarOrderStatus newStatus = StockOrderStatusMapper.mapFromDto(dto.status());
+        StockCarOrderStatus newStatus = stockOrderStatusMapper.toDomain(dto.status());
         if (!order.getStatus().canTransitionTo(newStatus)) {
             throw new DomainValidationException(
                     "Invalid stock order status transition: " + order.getStatus() + " -> " + newStatus);

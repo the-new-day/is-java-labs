@@ -1,7 +1,7 @@
 package org.dealership.application.service.inventory;
 
 import org.dealership.application.port.in.inventory.UpdateSparePartUseCase;
-import org.dealership.application.port.in.inventory.dto.SparePartSummary;
+import org.dealership.application.port.in.inventory.dto.SparePartSummaryDto;
 import org.dealership.application.port.out.persistence.SparePartRepository;
 import org.dealership.application.service.ServiceTestData;
 import org.dealership.domain.model.id.SparePartId;
@@ -32,7 +32,7 @@ class UpdateSparePartInteractorTest {
         when(sparePartRepository.findById(new SparePartId(partIdValue))).thenReturn(Optional.of(part));
 
         UpdateSparePartInteractor interactor = new UpdateSparePartInteractor(sparePartRepository);
-        SparePartSummary summary = ServiceTestData.sparePartSummary(partIdValue, modelIdValue);
+        SparePartSummaryDto summary = ServiceTestData.sparePartSummary(partIdValue, modelIdValue);
         var response = interactor.execute(new UpdateSparePartUseCase.Request(summary));
 
         assertNotNull(response);

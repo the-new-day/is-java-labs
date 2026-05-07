@@ -32,6 +32,6 @@ class GetSparePartInteractorTest {
         GetSparePartInteractor interactor = new GetSparePartInteractor(sparePartRepository);
         var response = interactor.execute(new GetSparePartUseCase.Request(partIdValue));
 
-        assertEquals(partIdValue, response.sparePartSummary().id());
+        assertEquals(partIdValue, response.sparePartSummaryDto().id());
     }
 }

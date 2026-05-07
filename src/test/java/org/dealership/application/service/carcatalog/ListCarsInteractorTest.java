@@ -32,7 +32,7 @@ class ListCarsInteractorTest {
         CarModel model = ServiceTestData.carModel(UUID.randomUUID(), brand);
         Car car = ServiceTestData.car(UUID.randomUUID(), model);
 
-        when(carRepository.findBySpec(any())).thenReturn(List.of(car));
+        when(carRepository.findByFilter(any())).thenReturn(List.of(car));
 
         CarFilterDto filterDto = ServiceTestData.carFilterDto(brand.getId().value(), model.getId().value());
         ListCarsInteractor interactor = new ListCarsInteractor(carRepository);

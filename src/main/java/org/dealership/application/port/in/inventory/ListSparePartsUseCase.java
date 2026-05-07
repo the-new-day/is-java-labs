@@ -1,6 +1,6 @@
 package org.dealership.application.port.in.inventory;
 
-import org.dealership.application.port.in.inventory.dto.SparePartSummary;
+import org.dealership.application.port.in.inventory.dto.SparePartSummaryDto;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ public interface ListSparePartsUseCase {
 
     record Request() {}
 
-    record Response(List<SparePartSummary> sparePartSummaryList) {}
+    record Response(List<SparePartSummaryDto> sparePartSummaryDtoList) {}
 }

@@ -5,7 +5,7 @@ import org.dealership.application.port.in.common.dto.MoneyDto;
 import java.util.Set;
 import java.util.UUID;
 
-public record SparePartSummary(
+public record SparePartSummaryDto(
         UUID id,
         String name,
         MoneyDto price,

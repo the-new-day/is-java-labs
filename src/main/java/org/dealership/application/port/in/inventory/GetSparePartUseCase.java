@@ -1,6 +1,6 @@
 package org.dealership.application.port.in.inventory;
 
-import org.dealership.application.port.in.inventory.dto.SparePartSummary;
+import org.dealership.application.port.in.inventory.dto.SparePartSummaryDto;
 
 import java.util.UUID;
 
@@ -9,5 +9,5 @@ public interface GetSparePartUseCase {
 
     record Request(UUID sparePartId) {}
 
-    record Response(SparePartSummary sparePartSummary) {}
+    record Response(SparePartSummaryDto sparePartSummaryDto) {}
 }

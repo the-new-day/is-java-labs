@@ -1,13 +1,12 @@
 package org.dealership.application.service.customorder;
 
-import org.dealership.application.mapping.ConfigurationMapper;
+import org.dealership.application.mapper.ConfigurationMapper;
 import org.dealership.application.port.in.customorder.CreateCustomOrderUseCase;
 import org.dealership.application.port.in.common.dto.ConfigurationDto;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.port.out.persistence.CustomCarOrderRepository;
 import org.dealership.application.port.out.persistence.UserRepository;
 import org.dealership.domain.exception.EntityNotFoundException;
-import org.dealership.domain.model.car.CarModel;
 import org.dealership.domain.model.configuration.Configuration;
 import org.dealership.domain.model.id.CarModelId;
 import org.dealership.domain.model.id.UserId;
@@ -24,26 +23,29 @@ public class CreateCustomOrderInteractor implements CreateCustomOrderUseCase {
     private final CarModelRepository carModelRepository;
     private final UserRepository userRepository;
     private final UserSelectionStrategy userSelectionStrategy;
+    private final ConfigurationMapper configurationMapper;
 
     public CreateCustomOrderInteractor(
             CustomCarOrderRepository customOrderRepository,
             CarModelRepository carModelRepository,
             UserRepository userRepository,
-            UserSelectionStrategy userSelectionStrategy
+            UserSelectionStrategy userSelectionStrategy,
+            ConfigurationMapper configurationMapper
     ) {
         this.customOrderRepository = customOrderRepository;
         this.carModelRepository = carModelRepository;
         this.userRepository = userRepository;
         this.userSelectionStrategy = userSelectionStrategy;
+        this.configurationMapper = configurationMapper;
     }
 
     @Override
     public Response execute(Request request) {
         ConfigurationDto configurationDto = request.configuration();
         CarModelId modelId = new CarModelId(configurationDto.carModel().id());
-        CarModel model = carModelRepository.findById(modelId)
+        carModelRepository.findById(modelId)
                 .orElseThrow(() -> new EntityNotFoundException("Car model not found: " + modelId));
-        Configuration configuration = ConfigurationMapper.mapFromDto(configurationDto, model);
+        Configuration configuration = configurationMapper.toDomain(configurationDto);
 
         List<UserId> managers = userRepository.findByRole(UserRole.MANAGER)
                 .stream()

@@ -1,5 +1,10 @@
 package org.dealership.infrastructure.config;
 
+import org.dealership.application.mapper.CarMapper;
+import org.dealership.application.mapper.CarModelMapper;
+import org.dealership.application.mapper.ColorMapper;
+import org.dealership.application.mapper.ConfigurationMapper;
+import org.dealership.application.mapper.SparePartMapper;
 import org.dealership.application.port.in.inventory.AddCarUseCase;
 import org.dealership.application.port.in.inventory.AddModelUseCase;
 import org.dealership.application.port.in.inventory.AddSparePartUseCase;
@@ -37,18 +42,18 @@ import org.springframework.context.annotation.Configuration;
 public class InventoryUseCaseConfig {
 
     @Bean
-    public AddCarUseCase addCarUseCase(CarRepository carRepository, CarModelRepository carModelRepository) {
-        return new AddCarInteractor(carRepository, carModelRepository);
+    public AddCarUseCase addCarUseCase(CarRepository carRepository, CarModelRepository carModelRepository, CarMapper carMapper) {
+        return new AddCarInteractor(carRepository, carModelRepository, carMapper);
     }
 
     @Bean
-    public AddModelUseCase addModelUseCase(CarModelRepository carModelRepository, BrandRepository brandRepository) {
-        return new AddModelInteractor(carModelRepository, brandRepository);
+    public AddModelUseCase addModelUseCase(CarModelRepository carModelRepository, BrandRepository brandRepository, CarModelMapper carModelMapper) {
+        return new AddModelInteractor(carModelRepository, brandRepository, carModelMapper);
     }
 
     @Bean
-    public AddSparePartUseCase addSparePartUseCase(SparePartRepository sparePartRepository) {
-        return new AddSparePartInteractor(sparePartRepository);
+    public AddSparePartUseCase addSparePartUseCase(SparePartRepository sparePartRepository, SparePartMapper sparePartMapper) {
+        return new AddSparePartInteractor(sparePartRepository, sparePartMapper);
     }
 
     @Bean
@@ -67,37 +72,42 @@ public class InventoryUseCaseConfig {
     }
 
     @Bean
-    public GetCarUseCase getCarUseCase(CarRepository carRepository) {
-        return new GetCarInteractor(carRepository);
+    public GetCarUseCase getCarUseCase(CarRepository carRepository, CarMapper carMapper) {
+        return new GetCarInteractor(carRepository, carMapper);
     }
 
     @Bean
-    public GetSparePartUseCase getSparePartUseCase(SparePartRepository sparePartRepository) {
-        return new GetSparePartInteractor(sparePartRepository);
+    public GetSparePartUseCase getSparePartUseCase(SparePartRepository sparePartRepository, SparePartMapper sparePartMapper) {
+        return new GetSparePartInteractor(sparePartRepository, sparePartMapper);
     }
 
     @Bean
-    public ListCarsUseCase listCarsUseCase(CarRepository carRepository) {
-        return new ListCarsInteractor(carRepository);
+    public ListCarsUseCase listCarsUseCase(CarRepository carRepository, CarMapper carMapper) {
+        return new ListCarsInteractor(carRepository, carMapper);
     }
 
     @Bean
-    public ListSparePartsUseCase listSparePartsUseCase(SparePartRepository sparePartRepository) {
-        return new ListSparePartsInteractor(sparePartRepository);
+    public ListSparePartsUseCase listSparePartsUseCase(SparePartRepository sparePartRepository, SparePartMapper sparePartMapper) {
+        return new ListSparePartsInteractor(sparePartRepository, sparePartMapper);
     }
 
     @Bean
-    public UpdateCarUseCase updateCarUseCase(CarRepository carRepository, CarModelRepository carModelRepository) {
-        return new UpdateCarInteractor(carRepository, carModelRepository);
+    public UpdateCarUseCase updateCarUseCase(
+            CarRepository carRepository,
+            CarModelRepository carModelRepository,
+            ConfigurationMapper configurationMapper,
+            ColorMapper colorMapper
+    ) {
+        return new UpdateCarInteractor(carRepository, carModelRepository, configurationMapper, colorMapper);
     }
 
     @Bean
-    public UpdateModelUseCase updateModelUseCase(CarModelRepository carModelRepository) {
-        return new UpdateModelInteractor(carModelRepository);
+    public UpdateModelUseCase updateModelUseCase(CarModelRepository carModelRepository, CarModelMapper carModelMapper) {
+        return new UpdateModelInteractor(carModelRepository, carModelMapper);
     }
 
     @Bean
-    public UpdateSparePartUseCase updateSparePartUseCase(SparePartRepository sparePartRepository) {
-        return new UpdateSparePartInteractor(sparePartRepository);
+    public UpdateSparePartUseCase updateSparePartUseCase(SparePartRepository sparePartRepository, SparePartMapper sparePartMapper) {
+        return new UpdateSparePartInteractor(sparePartRepository, sparePartMapper);
     }
 }

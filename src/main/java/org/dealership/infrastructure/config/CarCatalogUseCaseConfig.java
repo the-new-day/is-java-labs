@@ -1,5 +1,8 @@
 package org.dealership.infrastructure.config;
 
+import org.dealership.application.mapper.CarFilterMapper;
+import org.dealership.application.mapper.CarMapper;
+import org.dealership.application.mapper.CarModelMapper;
 import org.dealership.application.port.in.carcatalog.GetCarUseCase;
 import org.dealership.application.port.in.carcatalog.GetModelUseCase;
 import org.dealership.application.port.in.carcatalog.ListCarsUseCase;
@@ -17,22 +20,26 @@ import org.springframework.context.annotation.Configuration;
 public class CarCatalogUseCaseConfig {
 
     @Bean
-    public GetCarUseCase getCarUseCase(CarRepository carRepository) {
-        return new GetCarInteractor(carRepository);
+    public GetCarUseCase getCarUseCase(CarRepository carRepository, CarMapper carMapper) {
+        return new GetCarInteractor(carRepository, carMapper);
     }
 
     @Bean
-    public GetModelUseCase getModelUseCase(CarModelRepository carModelRepository) {
-        return new GetModelInteractor(carModelRepository);
+    public GetModelUseCase getModelUseCase(CarModelRepository carModelRepository, CarModelMapper carModelMapper) {
+        return new GetModelInteractor(carModelRepository, carModelMapper);
     }
 
     @Bean
-    public ListCarsUseCase listCarsUseCase(CarRepository carRepository) {
-        return new ListCarsInteractor(carRepository);
+    public ListCarsUseCase listCarsUseCase(
+            CarRepository carRepository,
+            CarFilterMapper carFilterMapper,
+            CarMapper carMapper
+    ) {
+        return new ListCarsInteractor(carRepository, carFilterMapper, carMapper);
     }
 
     @Bean
-    public ListModelsUseCase listModelsUseCase(CarModelRepository carModelRepository) {
-        return new ListModelsInteractor(carModelRepository);
+    public ListModelsUseCase listModelsUseCase(CarModelRepository carModelRepository, CarModelMapper carModelMapper) {
+        return new ListModelsInteractor(carModelRepository, carModelMapper);
     }
 }

@@ -10,7 +10,7 @@ import org.dealership.application.port.in.customorder.dto.CustomOrderStatusDto;
 import org.dealership.application.port.in.inventory.dto.NewCarDetailsDto;
 import org.dealership.application.port.in.inventory.dto.NewModelDto;
 import org.dealership.application.port.in.inventory.dto.NewSparePartDto;
-import org.dealership.application.port.in.inventory.dto.SparePartSummary;
+import org.dealership.application.port.in.inventory.dto.SparePartSummaryDto;
 import org.dealership.application.port.in.stockorder.dto.StockOrderDto;
 import org.dealership.application.port.in.stockorder.dto.StockOrderStatusDto;
 import org.dealership.application.port.in.testdrive.dto.TestDriveRequestDto;
@@ -195,8 +195,8 @@ public final class ServiceTestData {
         );
     }
 
-    public static SparePartSummary sparePartSummary(UUID partId, UUID modelId) {
-        return new SparePartSummary(
+    public static SparePartSummaryDto sparePartSummary(UUID partId, UUID modelId) {
+        return new SparePartSummaryDto(
                 partId,
                 "Part",
                 new MoneyDto(BigDecimal.valueOf(500)),

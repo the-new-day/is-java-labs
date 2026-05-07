@@ -1,5 +1,7 @@
 package org.dealership.infrastructure.config;
 
+import org.dealership.application.mapper.UserMapper;
+import org.dealership.application.mapper.UserRoleMapper;
 import org.dealership.application.port.in.user.CreateUserUseCase;
 import org.dealership.application.port.in.user.DeleteUserUseCase;
 import org.dealership.application.port.in.user.GetUserUseCase;
@@ -25,8 +27,8 @@ public class UserUseCaseConfig {
     }
 
     @Bean
-    public CreateUserUseCase createUserUseCase(UserRepository userRepository) {
-        return new CreateUserInteractor(userRepository);
+    public CreateUserUseCase createUserUseCase(UserRepository userRepository, UserRoleMapper userRoleMapper) {
+        return new CreateUserInteractor(userRepository, userRoleMapper);
     }
 
     @Bean
@@ -35,17 +37,17 @@ public class UserUseCaseConfig {
     }
 
     @Bean
-    public GetUserUseCase getUserUseCase(UserRepository userRepository) {
-        return new GetUserInteractor(userRepository);
+    public GetUserUseCase getUserUseCase(UserRepository userRepository, UserMapper userMapper) {
+        return new GetUserInteractor(userRepository, userMapper);
     }
 
     @Bean
-    public ListUsersUseCase listUsersUseCase(UserRepository userRepository) {
-        return new ListUsersInteractor(userRepository);
+    public ListUsersUseCase listUsersUseCase(UserRepository userRepository, UserMapper userMapper) {
+        return new ListUsersInteractor(userRepository, userMapper);
     }
 
     @Bean
-    public UpdateUserUseCase updateUserUseCase(UserRepository userRepository) {
-        return new UpdateUserInteractor(userRepository);
+    public UpdateUserUseCase updateUserUseCase(UserRepository userRepository, UserMapper userMapper) {
+        return new UpdateUserInteractor(userRepository, userMapper);
     }
 }

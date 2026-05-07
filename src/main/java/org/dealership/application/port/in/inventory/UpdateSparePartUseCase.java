@@ -1,11 +1,11 @@
 package org.dealership.application.port.in.inventory;
 
-import org.dealership.application.port.in.inventory.dto.SparePartSummary;
+import org.dealership.application.port.in.inventory.dto.SparePartSummaryDto;
 
 public interface UpdateSparePartUseCase {
     Response execute(Request request);
 
-    record Request(SparePartSummary sparePartSummary) {}
+    record Request(SparePartSummaryDto sparePartSummaryDto) {}
 
     record Response() {}
 }

@@ -2,7 +2,7 @@ package org.dealership.infrastructure.rest.controller.inventory;
 
 import org.dealership.application.port.in.inventory.*;
 import org.dealership.application.port.in.inventory.dto.NewSparePartDto;
-import org.dealership.application.port.in.inventory.dto.SparePartSummary;
+import org.dealership.application.port.in.inventory.dto.SparePartSummaryDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +49,7 @@ public class InventorySparePartController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateSparePart(@PathVariable UUID id, @RequestBody SparePartSummary sparePart) {
+    public ResponseEntity<Void> updateSparePart(@PathVariable UUID id, @RequestBody SparePartSummaryDto sparePart) {
         updateSparePartUseCase.execute(new UpdateSparePartUseCase.Request(sparePart));
         return ResponseEntity.ok().build();
     }
