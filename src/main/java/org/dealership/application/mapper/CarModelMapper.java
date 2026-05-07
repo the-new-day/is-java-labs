@@ -8,6 +8,7 @@ import org.dealership.domain.model.car.CarModel;
 import org.dealership.domain.model.id.CarModelId;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.stream.Collectors;
 
@@ -22,41 +23,54 @@ import java.util.stream.Collectors;
         ComponentTypeMapper.class,
         ComponentVariantSelectionMapper.class
 })
-public interface CarModelMapper {
+public abstract class CarModelMapper {
+
+    @Autowired
+    protected MoneyMapper moneyMapper;
+
+    @Autowired
+    protected CarBodyTypeMapper carBodyTypeMapper;
+
+    @Autowired
+    protected FuelTypeMapper fuelTypeMapper;
+
+    @Autowired
+    protected DriveTypeMapper driveTypeMapper;
+
+    @Autowired
+    protected TransmissionTypeMapper transmissionTypeMapper;
+
+    @Autowired
+    protected ComponentVariantSelectionMapper componentVariantSelectionMapper;
+
+    @Autowired
+    protected ComponentTypeMapper componentTypeMapper;
 
     @Mapping(target = "id", source = "id.value")
-    CarModelDto toDto(CarModel model);
+    public abstract CarModelDto toDto(CarModel model);
 
     @Mapping(target = "id", source = "id.value")
-    ModelSummaryDto toSummaryDto(CarModel model);
+    public abstract ModelSummaryDto toSummaryDto(CarModel model);
 
     @Mapping(target = "id", source = "id", qualifiedByName = "toCarModelId")
-    CarModel toDomain(CarModelDto dto);
+    public abstract CarModel toDomain(CarModelDto dto);
 
-    default CarModel toDomain(NewModelDto dto, CarModelId id, Brand brand) {
+    public CarModel toDomain(NewModelDto dto, CarModelId id, Brand brand) {
         return new CarModel(
                 id,
                 brand,
                 dto.name(),
-                moneyMapper().toDomain(dto.basePrice()),
-                carBodyTypeMapper().toDomain(dto.carBodyType()),
-                fuelTypeMapper().toDomain(dto.fuelType()),
-                driveTypeMapper().toDomain(dto.driveType()),
+                moneyMapper.toDomain(dto.basePrice()),
+                carBodyTypeMapper.toDomain(dto.carBodyType()),
+                fuelTypeMapper.toDomain(dto.fuelType()),
+                driveTypeMapper.toDomain(dto.driveType()),
                 dto.engineVolume(),
                 dto.enginePower(),
-                transmissionTypeMapper().toDomain(dto.baseTransmissionType()),
-                componentVariantSelectionMapper().toDomain(dto.baseComponentSelection()),
+                transmissionTypeMapper.toDomain(dto.baseTransmissionType()),
+                componentVariantSelectionMapper.toDomain(dto.baseComponentSelection()),
                 dto.configurableComponentTypes().stream()
-                        .map(componentTypeMapper()::toDomain)
+                        .map(componentTypeMapper::toDomain)
                         .collect(Collectors.toUnmodifiableSet())
         );
     }
-
-    MoneyMapper moneyMapper();
-    CarBodyTypeMapper carBodyTypeMapper();
-    FuelTypeMapper fuelTypeMapper();
-    DriveTypeMapper driveTypeMapper();
-    TransmissionTypeMapper transmissionTypeMapper();
-    ComponentVariantSelectionMapper componentVariantSelectionMapper();
-    ComponentTypeMapper componentTypeMapper();
 }
