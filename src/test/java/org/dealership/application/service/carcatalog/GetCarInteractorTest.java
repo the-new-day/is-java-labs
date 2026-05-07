@@ -1,6 +1,7 @@
 package org.dealership.application.service.carcatalog;
 
-import org.dealership.application.port.in.inventory.GetCarUseCase;
+import org.dealership.application.mapper.CarMapper;
+import org.dealership.application.port.in.carcatalog.GetCarUseCase;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.application.service.ServiceTestData;
 import org.dealership.domain.model.car.Brand;
@@ -23,6 +24,8 @@ import static org.mockito.Mockito.when;
 class GetCarInteractorTest {
     @Mock
     private CarRepository carRepository;
+    @Mock
+    private CarMapper carMapper;
 
     @Test
     void shouldGetCar() {
@@ -32,8 +35,9 @@ class GetCarInteractorTest {
         Car car = ServiceTestData.car(carIdValue, model);
 
         when(carRepository.findById(new CarId(carIdValue))).thenReturn(Optional.of(car));
+        when(carMapper.toDetailsDto(car)).thenReturn(ServiceTestData.carDetailsDto(carIdValue, model.getId().value(), true));
 
-        GetCarInteractor interactor = new GetCarInteractor(carRepository);
+        GetCarInteractor interactor = new GetCarInteractor(carRepository, carMapper);
         var response = interactor.execute(new GetCarUseCase.Request(carIdValue));
 
         assertEquals(carIdValue, response.carDetails().id());

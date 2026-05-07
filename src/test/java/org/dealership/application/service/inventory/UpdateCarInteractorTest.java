@@ -1,5 +1,7 @@
 package org.dealership.application.service.inventory;
 
+import org.dealership.application.mapper.ColorMapper;
+import org.dealership.application.mapper.ConfigurationMapper;
 import org.dealership.application.port.in.inventory.UpdateCarUseCase;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.port.out.persistence.CarRepository;
@@ -7,6 +9,7 @@ import org.dealership.application.service.ServiceTestData;
 import org.dealership.domain.model.car.Brand;
 import org.dealership.domain.model.car.Car;
 import org.dealership.domain.model.car.CarModel;
+import org.dealership.domain.model.enums.Color;
 import org.dealership.domain.model.id.CarId;
 import org.dealership.domain.model.id.CarModelId;
 import org.junit.jupiter.api.Test;
@@ -27,6 +30,10 @@ class UpdateCarInteractorTest {
     private CarRepository carRepository;
     @Mock
     private CarModelRepository carModelRepository;
+    @Mock
+    private ConfigurationMapper configurationMapper;
+    @Mock
+    private ColorMapper colorMapper;
 
     @Test
     void shouldUpdateCar() {
@@ -38,8 +45,10 @@ class UpdateCarInteractorTest {
 
         when(carRepository.findById(new CarId(carIdValue))).thenReturn(Optional.of(existing));
         when(carModelRepository.findById(new CarModelId(modelIdValue))).thenReturn(Optional.of(model));
+        when(configurationMapper.toDomain(org.mockito.ArgumentMatchers.any())).thenReturn(ServiceTestData.configuration(model));
+        when(colorMapper.toDomain(org.mockito.ArgumentMatchers.any())).thenReturn(Color.BLACK);
 
-        UpdateCarInteractor interactor = new UpdateCarInteractor(carRepository, carModelRepository);
+        UpdateCarInteractor interactor = new UpdateCarInteractor(carRepository, carModelRepository, configurationMapper, colorMapper);
         var response = interactor.execute(
                 new UpdateCarUseCase.Request(
                         ServiceTestData.carDetailsDto(carIdValue, modelIdValue, false)

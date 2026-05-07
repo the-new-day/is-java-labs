@@ -1,5 +1,6 @@
 package org.dealership.application.service.inventory;
 
+import org.dealership.application.mapper.SparePartMapper;
 import org.dealership.application.port.in.inventory.AddSparePartUseCase;
 import org.dealership.application.port.in.inventory.dto.NewSparePartDto;
 import org.dealership.application.port.out.persistence.SparePartRepository;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.when;
 class AddSparePartInteractorTest {
     @Mock
     private SparePartRepository sparePartRepository;
+    @Mock
+    private SparePartMapper sparePartMapper;
 
     @Test
     void shouldAddSparePart() {
@@ -28,7 +31,7 @@ class AddSparePartInteractorTest {
 
         when(sparePartRepository.nextId()).thenReturn(new SparePartId(partIdValue));
 
-        AddSparePartInteractor interactor = new AddSparePartInteractor(sparePartRepository);
+        AddSparePartInteractor interactor = new AddSparePartInteractor(sparePartRepository, sparePartMapper);
         NewSparePartDto dto = ServiceTestData.newSparePartDto(modelIdValue);
         var response = interactor.execute(new AddSparePartUseCase.Request(dto));
 

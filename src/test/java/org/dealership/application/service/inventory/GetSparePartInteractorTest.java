@@ -1,5 +1,6 @@
 package org.dealership.application.service.inventory;
 
+import org.dealership.application.mapper.SparePartMapper;
 import org.dealership.application.port.in.inventory.GetSparePartUseCase;
 import org.dealership.application.port.out.persistence.SparePartRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.when;
 class GetSparePartInteractorTest {
     @Mock
     private SparePartRepository sparePartRepository;
+    @Mock
+    private SparePartMapper sparePartMapper;
 
     @Test
     void shouldGetSparePart() {
@@ -28,8 +31,9 @@ class GetSparePartInteractorTest {
         SparePart part = ServiceTestData.sparePart(partIdValue, modelIdValue);
 
         when(sparePartRepository.findById(new SparePartId(partIdValue))).thenReturn(Optional.of(part));
+        when(sparePartMapper.toSummaryDto(part)).thenReturn(ServiceTestData.sparePartSummary(partIdValue, modelIdValue));
 
-        GetSparePartInteractor interactor = new GetSparePartInteractor(sparePartRepository);
+        GetSparePartInteractor interactor = new GetSparePartInteractor(sparePartRepository, sparePartMapper);
         var response = interactor.execute(new GetSparePartUseCase.Request(partIdValue));
 
         assertEquals(partIdValue, response.sparePartSummaryDto().id());

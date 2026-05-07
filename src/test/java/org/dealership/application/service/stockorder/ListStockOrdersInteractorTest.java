@@ -1,5 +1,6 @@
 package org.dealership.application.service.stockorder;
 
+import org.dealership.application.mapper.StockOrderMapper;
 import org.dealership.application.port.in.stockorder.ListStockOrdersUseCase;
 import org.dealership.application.port.out.persistence.StockCarOrderRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -19,6 +20,8 @@ import static org.mockito.Mockito.when;
 class ListStockOrdersInteractorTest {
     @Mock
     private StockCarOrderRepository stockOrderRepository;
+    @Mock
+    private StockOrderMapper stockOrderMapper;
 
     @Test
     void shouldListStockOrders() {
@@ -30,7 +33,7 @@ class ListStockOrdersInteractorTest {
         );
         when(stockOrderRepository.findAll()).thenReturn(List.of(order));
 
-        ListStockOrdersInteractor interactor = new ListStockOrdersInteractor(stockOrderRepository);
+        ListStockOrdersInteractor interactor = new ListStockOrdersInteractor(stockOrderRepository, stockOrderMapper);
         var response = interactor.execute(new ListStockOrdersUseCase.Request());
 
         assertEquals(1, response.order().size());

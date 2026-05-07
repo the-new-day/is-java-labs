@@ -1,5 +1,6 @@
 package org.dealership.application.service.testdrive;
 
+import org.dealership.application.mapper.TestDriveRequestMapper;
 import org.dealership.application.port.in.testdrive.GetTestDriveRequestUseCase;
 import org.dealership.application.port.out.persistence.TestDriveRequestRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -21,21 +22,27 @@ import static org.mockito.Mockito.when;
 class GetTestDriveRequestInteractorTest {
     @Mock
     private TestDriveRequestRepository testDriveRequestRepository;
+    @Mock
+    private TestDriveRequestMapper testDriveRequestMapper;
 
     @Test
     void shouldGetTestDriveRequest() {
         UUID requestIdValue = UUID.randomUUID();
+        UUID clientIdValue = UUID.randomUUID();
+        UUID carIdValue = UUID.randomUUID();
         TestDriveRequest request = ServiceTestData.testDriveRequest(
                 requestIdValue,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
+                clientIdValue,
+                carIdValue,
                 LocalDateTime.now()
         );
 
         when(testDriveRequestRepository.findById(new TestDriveRequestId(requestIdValue)))
                 .thenReturn(Optional.of(request));
+        when(testDriveRequestMapper.toDto(request))
+                .thenReturn(ServiceTestData.testDriveRequestDto(requestIdValue, clientIdValue, carIdValue, LocalDateTime.now()));
 
-        GetTestDriveRequestInteractor interactor = new GetTestDriveRequestInteractor(testDriveRequestRepository);
+        GetTestDriveRequestInteractor interactor = new GetTestDriveRequestInteractor(testDriveRequestRepository, testDriveRequestMapper);
         var response = interactor.execute(new GetTestDriveRequestUseCase.Request(requestIdValue));
 
         assertEquals(requestIdValue, response.testDriveRequest().id());

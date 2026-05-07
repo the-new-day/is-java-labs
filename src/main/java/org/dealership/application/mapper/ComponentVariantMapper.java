@@ -28,11 +28,6 @@ public abstract class ComponentVariantMapper {
     @Mapping(target = "carModelIds", source = "compatibleModelIds", qualifiedByName = "carModelIdToUuid")
     public abstract ComponentVariantDto toDto(ComponentVariant variant);
 
-    @Named("carModelIdToUuid")
-    public UUID carModelIdToUuid(CarModelId id) {
-        return id.value();
-    }
-
     public ComponentVariant toDomain(ComponentVariantDto dto) {
         return new ComponentVariant(
                 baseIdMapper.toComponentVariantId(dto.id()),

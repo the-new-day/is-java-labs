@@ -1,5 +1,6 @@
 package org.dealership.application.service.inventory;
 
+import org.dealership.application.mapper.CarModelMapper;
 import org.dealership.application.port.in.inventory.UpdateModelUseCase;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -22,6 +23,8 @@ import static org.mockito.Mockito.when;
 class UpdateModelInteractorTest {
     @Mock
     private CarModelRepository carModelRepository;
+    @Mock
+    private CarModelMapper carModelMapper;
 
     @Test
     void shouldUpdateModel() {
@@ -31,7 +34,7 @@ class UpdateModelInteractorTest {
 
         when(carModelRepository.findById(new CarModelId(modelIdValue))).thenReturn(Optional.of(model));
 
-        UpdateModelInteractor interactor = new UpdateModelInteractor(carModelRepository);
+        UpdateModelInteractor interactor = new UpdateModelInteractor(carModelRepository, carModelMapper);
         var response = interactor.execute(new UpdateModelUseCase.Request(ServiceTestData.carModelDto(modelIdValue)));
 
         assertNotNull(response);

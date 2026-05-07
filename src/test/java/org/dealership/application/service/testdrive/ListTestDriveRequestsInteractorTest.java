@@ -1,5 +1,6 @@
 package org.dealership.application.service.testdrive;
 
+import org.dealership.application.mapper.TestDriveRequestMapper;
 import org.dealership.application.port.in.testdrive.ListTestDriveRequestsUseCase;
 import org.dealership.application.port.out.persistence.TestDriveRequestRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.when;
 class ListTestDriveRequestsInteractorTest {
     @Mock
     private TestDriveRequestRepository testDriveRequestRepository;
+    @Mock
+    private TestDriveRequestMapper testDriveRequestMapper;
 
     @Test
     void shouldListTestDriveRequests() {
@@ -32,7 +35,7 @@ class ListTestDriveRequestsInteractorTest {
         when(testDriveRequestRepository.findAll()).thenReturn(List.of(request));
 
         ListTestDriveRequestsInteractor interactor
-                = new ListTestDriveRequestsInteractor(testDriveRequestRepository);
+                = new ListTestDriveRequestsInteractor(testDriveRequestRepository, testDriveRequestMapper);
         var response = interactor.execute(new ListTestDriveRequestsUseCase.Request());
 
         assertEquals(1, response.testDriveRequest().size());

@@ -1,5 +1,6 @@
 package org.dealership.application.service.stockorder;
 
+import org.dealership.application.mapper.StockOrderMapper;
 import org.dealership.application.port.in.stockorder.GetStockOrderUseCase;
 import org.dealership.application.port.out.persistence.StockCarOrderRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.when;
 class GetStockOrderInteractorTest {
     @Mock
     private StockCarOrderRepository stockOrderRepository;
+    @Mock
+    private StockOrderMapper stockOrderMapper;
 
     @Test
     void shouldGetStockOrder() {
@@ -32,8 +35,10 @@ class GetStockOrderInteractorTest {
         );
 
         when(stockOrderRepository.findById(new OrderId(orderIdValue))).thenReturn(Optional.of(order));
+        when(stockOrderMapper.toDto(order)).thenReturn(ServiceTestData.stockOrderDto(
+                orderIdValue, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "PLACED"));
 
-        GetStockOrderInteractor interactor = new GetStockOrderInteractor(stockOrderRepository);
+        GetStockOrderInteractor interactor = new GetStockOrderInteractor(stockOrderRepository, stockOrderMapper);
         var response = interactor.execute(new GetStockOrderUseCase.Request(orderIdValue));
 
         assertEquals(orderIdValue, response.order().id());

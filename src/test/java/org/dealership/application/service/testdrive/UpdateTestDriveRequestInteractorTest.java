@@ -1,5 +1,6 @@
 package org.dealership.application.service.testdrive;
 
+import org.dealership.application.mapper.TestDriveRequestMapper;
 import org.dealership.application.port.in.testdrive.UpdateTestDriveRequestUseCase;
 import org.dealership.application.port.out.persistence.TestDriveRequestRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -22,6 +23,8 @@ import static org.mockito.Mockito.when;
 class UpdateTestDriveRequestInteractorTest {
     @Mock
     private TestDriveRequestRepository testDriveRequestRepository;
+    @Mock
+    private TestDriveRequestMapper testDriveRequestMapper;
 
     @Test
     void shouldUpdateTestDriveRequest() {
@@ -38,7 +41,7 @@ class UpdateTestDriveRequestInteractorTest {
                 .thenReturn(Optional.of(request));
 
         UpdateTestDriveRequestInteractor interactor = new UpdateTestDriveRequestInteractor(
-                testDriveRequestRepository);
+                testDriveRequestRepository, testDriveRequestMapper);
         var response = interactor.execute(new UpdateTestDriveRequestUseCase.Request(
                 ServiceTestData.testDriveRequestDto(
                         requestIdValue, UUID.randomUUID(), carIdValue, LocalDateTime.now()

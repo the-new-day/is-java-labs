@@ -50,6 +50,7 @@ public abstract class CarModelMapper {
     public abstract CarModelDto toDto(CarModel model);
 
     @Mapping(target = "id", source = "id.value")
+    @Mapping(target = "name", source = "modelName")
     public abstract ModelSummaryDto toSummaryDto(CarModel model);
 
     @Mapping(target = "id", source = "id", qualifiedByName = "toCarModelId")

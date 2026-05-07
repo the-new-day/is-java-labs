@@ -1,5 +1,6 @@
 package org.dealership.application.service.inventory;
 
+import org.dealership.application.mapper.SparePartMapper;
 import org.dealership.application.port.in.inventory.ListSparePartsUseCase;
 import org.dealership.application.port.out.persistence.SparePartRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -19,13 +20,15 @@ import static org.mockito.Mockito.when;
 class ListSparePartsInteractorTest {
     @Mock
     private SparePartRepository sparePartRepository;
+    @Mock
+    private SparePartMapper sparePartMapper;
 
     @Test
     void shouldListSpareParts() {
         SparePart part = ServiceTestData.sparePart(UUID.randomUUID(), UUID.randomUUID());
         when(sparePartRepository.findAll()).thenReturn(List.of(part));
 
-        ListSparePartsInteractor interactor = new ListSparePartsInteractor(sparePartRepository);
+        ListSparePartsInteractor interactor = new ListSparePartsInteractor(sparePartRepository, sparePartMapper);
         var response = interactor.execute(new ListSparePartsUseCase.Request());
 
         assertEquals(1, response.sparePartSummaryDtoList().size());

@@ -1,5 +1,6 @@
 package org.dealership.application.service.customorder;
 
+import org.dealership.application.mapper.ConfigurationMapper;
 import org.dealership.application.port.in.customorder.CreateCustomOrderUseCase;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.port.out.persistence.CustomCarOrderRepository;
@@ -36,6 +37,8 @@ class CreateCustomOrderInteractorTest {
     private UserRepository userRepository;
     @Mock
     private UserSelectionStrategy userSelectionStrategy;
+    @Mock
+    private ConfigurationMapper configurationMapper;
 
     @Test
     void shouldCreateCustomOrder() {
@@ -49,12 +52,15 @@ class CreateCustomOrderInteractorTest {
         when(userRepository.findByRole(UserRole.MANAGER)).thenReturn(List.of(manager));
         when(userSelectionStrategy.selectUser(Stream.of(manager).map(User::getId).toList()))
                 .thenReturn(manager.getId());
+        when(configurationMapper.toDomain(org.mockito.ArgumentMatchers.any()))
+                .thenReturn(ServiceTestData.configuration(model));
 
         CreateCustomOrderInteractor interactor = new CreateCustomOrderInteractor(
                 customOrderRepository,
                 carModelRepository,
                 userRepository,
-                userSelectionStrategy
+                userSelectionStrategy,
+                configurationMapper
         );
         var response = interactor.execute(new CreateCustomOrderUseCase.Request(
                 UUID.randomUUID(),

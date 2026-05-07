@@ -1,5 +1,6 @@
 package org.dealership.application.service.user;
 
+import org.dealership.application.mapper.UserMapper;
 import org.dealership.application.port.in.user.GetUserUseCase;
 import org.dealership.application.port.out.persistence.UserRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -20,14 +21,17 @@ import static org.mockito.Mockito.when;
 class GetUserInteractorTest {
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private UserMapper userMapper;
 
     @Test
     void shouldGetUser() {
         UUID userIdValue = UUID.randomUUID();
         User user = ServiceTestData.user(userIdValue);
         when(userRepository.findById(new UserId(userIdValue))).thenReturn(Optional.of(user));
+        when(userMapper.toDto(user)).thenReturn(ServiceTestData.userDto(userIdValue, "Full Name", "CLIENT"));
 
-        GetUserInteractor interactor = new GetUserInteractor(userRepository);
+        GetUserInteractor interactor = new GetUserInteractor(userRepository, userMapper);
         var response = interactor.execute(new GetUserUseCase.Request(userIdValue));
 
         assertEquals(userIdValue, response.user().id());

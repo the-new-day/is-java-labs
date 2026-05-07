@@ -1,5 +1,6 @@
 package org.dealership.application.service.inventory;
 
+import org.dealership.application.mapper.CarModelMapper;
 import org.dealership.application.port.in.inventory.AddModelUseCase;
 import org.dealership.application.port.in.inventory.dto.NewModelDto;
 import org.dealership.application.port.out.persistence.BrandRepository;
@@ -26,6 +27,8 @@ class AddModelInteractorTest {
     private CarModelRepository carModelRepository;
     @Mock
     private BrandRepository brandRepository;
+    @Mock
+    private CarModelMapper carModelMapper;
 
     @Test
     void shouldAddModel() {
@@ -35,7 +38,7 @@ class AddModelInteractorTest {
         when(brandRepository.findById(new BrandId(brandIdValue))).thenReturn(Optional.of(brand));
         when(carModelRepository.nextId()).thenReturn(new CarModelId(UUID.randomUUID()));
 
-        AddModelInteractor interactor = new AddModelInteractor(carModelRepository, brandRepository);
+        AddModelInteractor interactor = new AddModelInteractor(carModelRepository, brandRepository, carModelMapper);
         NewModelDto newModel = ServiceTestData.newModelDto(brandIdValue);
         var response = interactor.execute(new AddModelUseCase.Request(newModel));
 

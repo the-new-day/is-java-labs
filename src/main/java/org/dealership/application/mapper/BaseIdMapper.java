@@ -48,4 +48,9 @@ public interface BaseIdMapper {
     default UserId toUserId(UUID id) {
         return new UserId(id);
     }
+
+    @Named("carModelIdToUuid")
+    default UUID carModelIdToUuid(CarModelId id) {
+        return id.value();
+    }
 }

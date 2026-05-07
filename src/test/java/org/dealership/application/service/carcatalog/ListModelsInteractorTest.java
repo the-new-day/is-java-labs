@@ -1,5 +1,6 @@
 package org.dealership.application.service.carcatalog;
 
+import org.dealership.application.mapper.CarModelMapper;
 import org.dealership.application.port.in.carcatalog.ListModelsUseCase;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -21,6 +22,8 @@ import static org.mockito.Mockito.when;
 class ListModelsInteractorTest {
     @Mock
     private CarModelRepository carModelRepository;
+    @Mock
+    private CarModelMapper carModelMapper;
 
     @Test
     void shouldListModels() {
@@ -29,7 +32,7 @@ class ListModelsInteractorTest {
 
         when(carModelRepository.findAll()).thenReturn(List.of(model));
 
-        ListModelsInteractor interactor = new ListModelsInteractor(carModelRepository);
+        ListModelsInteractor interactor = new ListModelsInteractor(carModelRepository, carModelMapper);
         var response = interactor.execute(new ListModelsUseCase.Request());
 
         assertEquals(1, response.modelSummaryList().size());

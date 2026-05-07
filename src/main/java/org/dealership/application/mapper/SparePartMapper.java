@@ -23,11 +23,6 @@ public abstract class SparePartMapper {
     @Mapping(target = "compatibleModelIds", source = "compatibleModelIds", qualifiedByName = "carModelIdToUuid")
     public abstract SparePartSummaryDto toSummaryDto(SparePart part);
 
-    @Named("carModelIdToUuid")
-    public UUID carModelIdToUuid(CarModelId id) {
-        return id.value();
-    }
-
     @Mapping(target = "id", source = "id", qualifiedByName = "toSparePartId")
     @Mapping(target = "compatibleModelIds", source = "compatibleModelIds", qualifiedByName = "toCarModelId")
     public abstract SparePart toDomain(SparePartSummaryDto dto);
