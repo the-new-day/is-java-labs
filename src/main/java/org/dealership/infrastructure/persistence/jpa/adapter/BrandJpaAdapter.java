@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
+@Transactional(readOnly = true)
 public class BrandJpaAdapter implements BrandRepository {
 
     private final BrandJpaRepository brandJpaRepository;

@@ -9,13 +9,27 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - dealership-postgres-data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U dealership -d dealership"]
       interval: 5s
       timeout: 5s
-      retries: 10
-    restart: unless-stopped
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: dealership-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/dealership
+      SPRING_DATASOURCE_USERNAME: dealership
+      SPRING_DATASOURCE_PASSWORD: dealership
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
-  dealership-postgres-data:
+  postgres_data:

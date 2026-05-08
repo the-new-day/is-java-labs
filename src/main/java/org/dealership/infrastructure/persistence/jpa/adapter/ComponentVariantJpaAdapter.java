@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 public class ComponentVariantJpaAdapter implements ComponentVariantRepository {
 
     private final ComponentVariantJpaRepository componentVariantJpaRepository;

@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import org.dealership.domain.model.enums.ComponentType;
+import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "component_variants")
+@BatchSize(size = 32)
 public class ComponentVariantJpaEntity extends BaseJpaEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "component_type", nullable = false)
@@ -29,6 +31,7 @@ public class ComponentVariantJpaEntity extends BaseJpaEntity {
     private BigDecimal surcharge;
 
     @OneToMany(mappedBy = "componentVariant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 32)
     private Set<ComponentVariantCompatibilityJpaEntity> compatibleModels = new LinkedHashSet<>();
 
     protected ComponentVariantJpaEntity() {

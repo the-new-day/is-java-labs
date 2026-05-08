@@ -12,32 +12,47 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ComponentVariantJpaRepository extends JpaRepository<ComponentVariantJpaEntity, UUID> {
-    Optional<ComponentVariantJpaEntity> findByIdAndRemovedFalse(UUID id);
 
+    @Query("""
+            SELECT DISTINCT v FROM ComponentVariantJpaEntity v
+            LEFT JOIN FETCH v.compatibleModels cm
+            LEFT JOIN FETCH cm.carModel
+            WHERE v.id = :id AND v.removed = false
+            """)
+    Optional<ComponentVariantJpaEntity> findByIdAndRemovedFalse(@Param("id") UUID id);
+
+    @Query("""
+            SELECT DISTINCT v FROM ComponentVariantJpaEntity v
+            LEFT JOIN FETCH v.compatibleModels cm
+            LEFT JOIN FETCH cm.carModel
+            WHERE v.removed = false
+            """)
     List<ComponentVariantJpaEntity> findAllByRemovedFalse();
 
-    List<ComponentVariantJpaEntity> findAllByIdInAndRemovedFalse(Collection<UUID> ids);
-
     @Query("""
-            select distinct variant
-            from ComponentVariantJpaEntity variant
-            join variant.compatibleModels compatibility
-            where variant.removed = false
-              and compatibility.removed = false
-              and compatibility.carModel.id = :modelId
+            SELECT DISTINCT v FROM ComponentVariantJpaEntity v
+            LEFT JOIN FETCH v.compatibleModels cm
+            LEFT JOIN FETCH cm.carModel
+            WHERE v.id IN :ids AND v.removed = false
             """)
-    List<ComponentVariantJpaEntity> findAllCompatibleWithModel(
-            @Param("modelId") UUID modelId
-    );
+    List<ComponentVariantJpaEntity> findAllByIdInAndRemovedFalse(@Param("ids") Collection<UUID> ids);
 
     @Query("""
-            select distinct variant
-            from ComponentVariantJpaEntity variant
-            join variant.compatibleModels compatibility
-            where variant.removed = false
-              and compatibility.removed = false
-              and variant.componentType = :componentType
-              and compatibility.carModel.id = :modelId
+            SELECT DISTINCT variant FROM ComponentVariantJpaEntity variant
+            JOIN variant.compatibleModels compatibility
+            WHERE variant.removed = false
+              AND compatibility.removed = false
+              AND compatibility.carModel.id = :modelId
+            """)
+    List<ComponentVariantJpaEntity> findAllCompatibleWithModel(@Param("modelId") UUID modelId);
+
+    @Query("""
+            SELECT DISTINCT variant FROM ComponentVariantJpaEntity variant
+            JOIN variant.compatibleModels compatibility
+            WHERE variant.removed = false
+              AND compatibility.removed = false
+              AND variant.componentType = :componentType
+              AND compatibility.carModel.id = :modelId
             """)
     List<ComponentVariantJpaEntity> findAllByComponentTypeAndCompatibleModel(
             @Param("componentType") ComponentType componentType,

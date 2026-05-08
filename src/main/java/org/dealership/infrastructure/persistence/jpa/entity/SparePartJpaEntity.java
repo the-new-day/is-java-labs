@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -22,6 +23,7 @@ public class SparePartJpaEntity extends BaseJpaEntity {
     private BigDecimal price;
 
     @OneToMany(mappedBy = "sparePart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 32)
     private Set<SparePartCompatibilityJpaEntity> compatibleModels = new LinkedHashSet<>();
 
     protected SparePartJpaEntity() {

@@ -4,7 +4,7 @@ import org.dealership.application.port.in.inventory.dto.CarSummaryDto;
 
 import java.util.List;
 
-public interface ListCarsUseCase {
+public interface ListInventoryCarsUseCase {
     Response execute(Request request);
 
     record Request() {}

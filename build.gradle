@@ -21,7 +21,7 @@ repositories {
 
 ext {
     mapstructVersion = '1.5.5.Final'
-    testcontainersVersion = '1.19.7'
+    testcontainersVersion = '2.0.4'
 }
 
 dependencies {
@@ -42,9 +42,9 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:5.12.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
 
-    testImplementation 'org.testcontainers:testcontainers:1.19.7'
-    testImplementation 'org.testcontainers:postgresql:1.19.7'
-    testImplementation 'org.testcontainers:junit-jupiter:1.19.7'
+    testImplementation "org.testcontainers:testcontainers:${testcontainersVersion}"
+    testImplementation "org.testcontainers:testcontainers-junit-jupiter:${testcontainersVersion}"
+    testImplementation "org.testcontainers:testcontainers-postgresql:${testcontainersVersion}"
 
     testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.13'
 }
@@ -52,6 +52,7 @@ dependencies {
 configurations {
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+    integrationTestRuntimeOnly.exclude group: 'org.slf4j', module: 'slf4j-simple'
 }
 
 sourceSets {

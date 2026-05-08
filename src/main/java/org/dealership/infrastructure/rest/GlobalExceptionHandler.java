@@ -44,12 +44,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ProblemDetail handleUnexpected(Exception ex) {
+    public ProblemDetail handleGeneric(Exception ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error occurred."
-        );
-        problem.setTitle("Internal Server Error");
+                HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        problem.setTitle("Internal server error");
         return problem;
     }
 }

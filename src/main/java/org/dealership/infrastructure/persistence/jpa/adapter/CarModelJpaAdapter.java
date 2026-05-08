@@ -23,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 public class CarModelJpaAdapter implements CarModelRepository {
 
     private final CarModelJpaRepository carModelJpaRepository;

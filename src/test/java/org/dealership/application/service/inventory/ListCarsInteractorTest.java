@@ -1,7 +1,7 @@
 package org.dealership.application.service.inventory;
 
 import org.dealership.application.mapper.CarMapper;
-import org.dealership.application.port.in.inventory.ListCarsUseCase;
+import org.dealership.application.port.in.inventory.ListInventoryCarsUseCase;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.application.service.ServiceTestData;
 import org.dealership.domain.model.car.Brand;
@@ -33,8 +33,8 @@ class ListCarsInteractorTest {
 
         when(carRepository.findAll()).thenReturn(List.of(car));
 
-        ListCarsInteractor interactor = new ListCarsInteractor(carRepository, carMapper);
-        var response = interactor.execute(new ListCarsUseCase.Request());
+        ListInventoryCarsInteractor interactor = new ListInventoryCarsInteractor(carRepository, carMapper);
+        var response = interactor.execute(new ListInventoryCarsUseCase.Request());
 
         assertEquals(1, response.carSummaryList().size());
     }

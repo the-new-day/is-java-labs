@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 public class CustomCarOrderJpaAdapter implements CustomCarOrderRepository {
 
     private final CustomCarOrderJpaRepository customCarOrderJpaRepository;

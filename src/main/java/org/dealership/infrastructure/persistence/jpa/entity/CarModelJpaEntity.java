@@ -14,6 +14,7 @@ import org.dealership.domain.model.enums.CarBodyType;
 import org.dealership.domain.model.enums.DriveType;
 import org.dealership.domain.model.enums.FuelType;
 import org.dealership.domain.model.enums.TransmissionType;
+import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -23,6 +24,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "car_models")
+@BatchSize(size = 32)
 public class CarModelJpaEntity extends BaseJpaEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -58,9 +60,11 @@ public class CarModelJpaEntity extends BaseJpaEntity {
     private TransmissionType baseTransmissionType;
 
     @OneToMany(mappedBy = "carModel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 32)
     private Set<CarModelBaseComponentJpaEntity> baseComponents = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "carModel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 32)
     private Set<CarModelConfigurableComponentJpaEntity> configurableComponents = new LinkedHashSet<>();
 
     protected CarModelJpaEntity() {

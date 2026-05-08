@@ -5,19 +5,7 @@ import org.dealership.application.mapper.CarModelMapper;
 import org.dealership.application.mapper.ColorMapper;
 import org.dealership.application.mapper.ConfigurationMapper;
 import org.dealership.application.mapper.SparePartMapper;
-import org.dealership.application.port.in.inventory.AddCarUseCase;
-import org.dealership.application.port.in.inventory.AddModelUseCase;
-import org.dealership.application.port.in.inventory.AddSparePartUseCase;
-import org.dealership.application.port.in.inventory.DeleteCarUseCase;
-import org.dealership.application.port.in.inventory.DeleteModelUseCase;
-import org.dealership.application.port.in.inventory.DeleteSparePartUseCase;
-import org.dealership.application.port.in.inventory.GetCarUseCase;
-import org.dealership.application.port.in.inventory.GetSparePartUseCase;
-import org.dealership.application.port.in.inventory.ListCarsUseCase;
-import org.dealership.application.port.in.inventory.ListSparePartsUseCase;
-import org.dealership.application.port.in.inventory.UpdateCarUseCase;
-import org.dealership.application.port.in.inventory.UpdateModelUseCase;
-import org.dealership.application.port.in.inventory.UpdateSparePartUseCase;
+import org.dealership.application.port.in.inventory.*;
 import org.dealership.application.port.out.persistence.BrandRepository;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.port.out.persistence.CarRepository;
@@ -28,9 +16,9 @@ import org.dealership.application.service.inventory.AddSparePartInteractor;
 import org.dealership.application.service.inventory.DeleteCarInteractor;
 import org.dealership.application.service.inventory.DeleteModelInteractor;
 import org.dealership.application.service.inventory.DeleteSparePartInteractor;
-import org.dealership.application.service.inventory.GetCarInteractor;
+import org.dealership.application.service.inventory.GetInventoryCarInteractor;
 import org.dealership.application.service.inventory.GetSparePartInteractor;
-import org.dealership.application.service.inventory.ListCarsInteractor;
+import org.dealership.application.service.inventory.ListInventoryCarsInteractor;
 import org.dealership.application.service.inventory.ListSparePartsInteractor;
 import org.dealership.application.service.inventory.UpdateCarInteractor;
 import org.dealership.application.service.inventory.UpdateModelInteractor;
@@ -72,8 +60,8 @@ public class InventoryUseCaseConfig {
     }
 
     @Bean
-    public GetCarUseCase getCarUseCase(CarRepository carRepository, CarMapper carMapper) {
-        return new GetCarInteractor(carRepository, carMapper);
+    public GetInventoryCarUseCase getInventoryCarUseCase(CarRepository carRepository, CarMapper carMapper) {
+        return new GetInventoryCarInteractor(carRepository, carMapper);
     }
 
     @Bean
@@ -82,8 +70,8 @@ public class InventoryUseCaseConfig {
     }
 
     @Bean
-    public ListCarsUseCase listCarsUseCase(CarRepository carRepository, CarMapper carMapper) {
-        return new ListCarsInteractor(carRepository, carMapper);
+    public ListInventoryCarsUseCase listInventoryCarsUseCase(CarRepository carRepository, CarMapper carMapper) {
+        return new ListInventoryCarsInteractor(carRepository, carMapper);
     }
 
     @Bean

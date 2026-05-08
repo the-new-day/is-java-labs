@@ -1,16 +1,16 @@
 package org.dealership.application.service.inventory;
 
 import org.dealership.application.mapper.CarMapper;
-import org.dealership.application.port.in.inventory.GetCarUseCase;
+import org.dealership.application.port.in.inventory.GetInventoryCarUseCase;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.domain.exception.EntityNotFoundException;
 import org.dealership.domain.model.id.CarId;
 
-public class GetCarInteractor implements GetCarUseCase {
+public class GetInventoryCarInteractor implements GetInventoryCarUseCase {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
 
-    public GetCarInteractor(CarRepository carRepository, CarMapper carMapper) {
+    public GetInventoryCarInteractor(CarRepository carRepository, CarMapper carMapper) {
         this.carRepository = carRepository;
         this.carMapper = carMapper;
     }

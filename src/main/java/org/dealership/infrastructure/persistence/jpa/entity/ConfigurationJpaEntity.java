@@ -7,6 +7,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -15,12 +16,14 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "configurations")
+@BatchSize(size = 32)
 public class ConfigurationJpaEntity extends BaseJpaEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "car_model_id", nullable = false)
     private CarModelJpaEntity carModel;
 
     @OneToMany(mappedBy = "configuration", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 32)
     private Set<ConfigurationComponentVariantJpaEntity> componentVariants = new LinkedHashSet<>();
 
     protected ConfigurationJpaEntity() {

@@ -21,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
+@Transactional(readOnly = true)
 public class SparePartJpaAdapter implements SparePartRepository {
 
     private final SparePartJpaRepository sparePartJpaRepository;

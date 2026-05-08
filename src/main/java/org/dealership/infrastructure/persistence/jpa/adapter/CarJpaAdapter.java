@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Repository
+@Transactional(readOnly = true)
 public class CarJpaAdapter implements CarRepository {
 
     private final CarJpaRepository carJpaRepository;

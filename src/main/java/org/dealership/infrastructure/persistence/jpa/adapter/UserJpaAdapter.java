@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
+@Transactional(readOnly = true)
 public class UserJpaAdapter implements UserRepository {
 
     private final UserJpaRepository userJpaRepository;

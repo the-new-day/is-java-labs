@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
+@Transactional(readOnly = true)
 public class TestDriveRequestJpaAdapter implements TestDriveRequestRepository {
 
     private final TestDriveRequestJpaRepository testDriveRequestJpaRepository;

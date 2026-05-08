@@ -13,20 +13,20 @@ import java.util.UUID;
 @RequestMapping("/api/inventory/cars")
 public class InventoryCarController {
     private final AddCarUseCase addCarUseCase;
-    private final GetCarUseCase getCarUseCase;
-    private final ListCarsUseCase listCarsUseCase;
+    private final GetInventoryCarUseCase getInventoryCarUseCase;
+    private final ListInventoryCarsUseCase listInventoryCarsUseCase;
     private final UpdateCarUseCase updateCarUseCase;
     private final DeleteCarUseCase deleteCarUseCase;
 
     public InventoryCarController(
             AddCarUseCase addCarUseCase,
-            GetCarUseCase getCarUseCase,
-            ListCarsUseCase listCarsUseCase,
+            GetInventoryCarUseCase getInventoryCarUseCase,
+            ListInventoryCarsUseCase listInventoryCarsUseCase,
             UpdateCarUseCase updateCarUseCase,
             DeleteCarUseCase deleteCarUseCase) {
         this.addCarUseCase = addCarUseCase;
-        this.getCarUseCase = getCarUseCase;
-        this.listCarsUseCase = listCarsUseCase;
+        this.getInventoryCarUseCase = getInventoryCarUseCase;
+        this.listInventoryCarsUseCase = listInventoryCarsUseCase;
         this.updateCarUseCase = updateCarUseCase;
         this.deleteCarUseCase = deleteCarUseCase;
     }
@@ -38,13 +38,13 @@ public class InventoryCarController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetCarUseCase.Response> getCar(@PathVariable UUID id) {
-        return ResponseEntity.ok(getCarUseCase.execute(new GetCarUseCase.Request(id)));
+    public ResponseEntity<GetInventoryCarUseCase.Response> getCar(@PathVariable UUID id) {
+        return ResponseEntity.ok(getInventoryCarUseCase.execute(new GetInventoryCarUseCase.Request(id)));
     }
 
     @GetMapping
-    public ResponseEntity<ListCarsUseCase.Response> listCars() {
-        return ResponseEntity.ok(listCarsUseCase.execute(new ListCarsUseCase.Request()));
+    public ResponseEntity<ListInventoryCarsUseCase.Response> listCars() {
+        return ResponseEntity.ok(listInventoryCarsUseCase.execute(new ListInventoryCarsUseCase.Request()));
     }
 
     @PutMapping("/{id}")
