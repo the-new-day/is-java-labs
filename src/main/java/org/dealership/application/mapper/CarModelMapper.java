@@ -54,6 +54,8 @@ public abstract class CarModelMapper {
     public abstract ModelSummaryDto toSummaryDto(CarModel model);
 
     @Mapping(target = "id", source = "id", qualifiedByName = "toCarModelId")
+    @Mapping(target = "componentTypes", ignore = true)
+    @Mapping(target = "fixedComponentTypes", ignore = true)
     public abstract CarModel toDomain(CarModelDto dto);
 
     public CarModel toDomain(NewModelDto dto, CarModelId id, Brand brand) {

@@ -11,9 +11,7 @@ import org.dealership.infrastructure.persistence.jpa.entity.ConfigurationJpaEnti
 import org.dealership.infrastructure.persistence.jpa.entity.ComponentVariantJpaEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,26 +40,50 @@ public class ConfigurationJpaMapper {
         return new Configuration(model, new ComponentVariantSelection(variantMap));
     }
 
-    public ConfigurationJpaEntity toEntity(Configuration config, CarModelJpaEntity carModelEntity, Map<UUID, ComponentVariantJpaEntity> variantEntitiesById) {
+    public ConfigurationJpaEntity toEntity(
+            Configuration config,
+            CarModelJpaEntity carModelEntity,
+            Map<UUID, ComponentVariantJpaEntity> variantEntitiesById
+    ) {
         ConfigurationJpaEntity entity = new ConfigurationJpaEntity(UUID.randomUUID(), carModelEntity);
         replaceComponentVariants(entity, config, variantEntitiesById);
         return entity;
     }
 
-    public void updateEntity(ConfigurationJpaEntity entity, Configuration config, CarModelJpaEntity carModelEntity, Map<UUID, ComponentVariantJpaEntity> variantEntitiesById) {
+    public void updateEntity(
+            ConfigurationJpaEntity entity,
+            Configuration config,
+            CarModelJpaEntity carModelEntity,
+            Map<UUID, ComponentVariantJpaEntity> variantEntitiesById
+    ) {
         entity.setCarModel(carModelEntity);
         replaceComponentVariants(entity, config, variantEntitiesById);
     }
 
-    private void replaceComponentVariants(ConfigurationJpaEntity entity, Configuration config, Map<UUID, ComponentVariantJpaEntity> variantEntitiesById) {
-        Set<ConfigurationComponentVariantJpaEntity> componentVariants = config.getComponentVariantSelection().asMap().entrySet().stream()
-                .map(e -> new ConfigurationComponentVariantJpaEntity(
-                        UUID.randomUUID(),
-                        entity,
-                        e.getKey(),
-                        variantEntitiesById.get(e.getValue().getId().value())
-                ))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-        entity.replaceComponentVariants(componentVariants);
+    private void replaceComponentVariants(
+            ConfigurationJpaEntity entity, Configuration config,
+            Map<UUID, ComponentVariantJpaEntity> variantEntitiesById
+    ) {
+        Map<ComponentType, ConfigurationComponentVariantJpaEntity> existingByType = entity.getComponentVariants().stream()
+                .collect(Collectors.toMap(ConfigurationComponentVariantJpaEntity::getComponentType, cv -> cv));
+
+        Map<ComponentType, ComponentVariant> desired = config.getComponentVariantSelection().asMap();
+
+        existingByType.entrySet().stream()
+                .filter(e -> !desired.containsKey(e.getKey()))
+                .map(Map.Entry::getValue)
+                .forEach(entity::removeComponentVariant);
+
+        for (Map.Entry<ComponentType, ComponentVariant> entry : desired.entrySet()) {
+            ComponentType type = entry.getKey();
+            ComponentVariantJpaEntity variantEntity = variantEntitiesById.get(entry.getValue().getId().value());
+            ConfigurationComponentVariantJpaEntity existing = existingByType.get(type);
+            if (existing != null) {
+                existing.setComponentVariant(variantEntity);
+            } else {
+                entity.addComponentVariant(new ConfigurationComponentVariantJpaEntity(
+                        UUID.randomUUID(), entity, type, variantEntity));
+            }
+        }
     }
 }

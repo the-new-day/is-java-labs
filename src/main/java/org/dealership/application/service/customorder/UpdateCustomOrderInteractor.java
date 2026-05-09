@@ -33,8 +33,12 @@ public class UpdateCustomOrderInteractor implements UpdateCustomOrderUseCase {
     }
 
     private static CustomCarOrderStatus mapStatus(CustomOrderStatusDto dto) {
+        String name = dto.name() == null ? null : dto.name().toUpperCase();
+        if ("CONFIRMED".equals(name)) {
+            return CustomCarOrderStatus.APPROVED_BY_WAREHOUSE;
+        }
         try {
-            return CustomCarOrderStatus.valueOf(dto.name().toUpperCase());
+            return CustomCarOrderStatus.valueOf(name);
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new DomainValidationException("Unsupported custom order status: " + dto.name());
         }

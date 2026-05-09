@@ -59,11 +59,23 @@ public class SparePartJpaMapper {
             SparePart part,
             Map<UUID, CarModelJpaEntity> compatibleModelsById
     ) {
-        Set<SparePartCompatibilityJpaEntity> compatibilities = part.getCompatibleModelIds().stream()
+        Map<UUID, SparePartCompatibilityJpaEntity> existingByModelId = entity.getCompatibleModels().stream()
+                .collect(Collectors.toMap(c -> c.getCarModel().getId(), c -> c));
+
+        Set<UUID> desired = part.getCompatibleModelIds().stream()
                 .map(CarModelId::value)
-                .map(compatibleModelsById::get)
-                .map(model -> new SparePartCompatibilityJpaEntity(UUID.randomUUID(), entity, model))
-                .collect(Collectors.toCollection(java.util.LinkedHashSet::new));
-        entity.replaceCompatibleModels(compatibilities);
+                .collect(Collectors.toSet());
+
+        existingByModelId.entrySet().stream()
+                .filter(e -> !desired.contains(e.getKey()))
+                .map(Map.Entry::getValue)
+                .forEach(entity::removeCompatibleModel);
+
+        for (UUID modelId : desired) {
+            if (!existingByModelId.containsKey(modelId)) {
+                entity.addCompatibleModel(new SparePartCompatibilityJpaEntity(
+                        UUID.randomUUID(), entity, compatibleModelsById.get(modelId)));
+            }
+        }
     }
 }

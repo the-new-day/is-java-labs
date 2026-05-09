@@ -18,5 +18,6 @@ public interface StockOrderMapper {
     @Mapping(target = "clientId", source = "clientId", qualifiedByName = "toUserId")
     @Mapping(target = "managerId", source = "managerId", qualifiedByName = "toUserId")
     @Mapping(target = "carId", source = "carId", qualifiedByName = "toCarId")
+    @Mapping(target = "withStatus", ignore = true)
     StockCarOrder toDomain(StockOrderDto dto);
 }

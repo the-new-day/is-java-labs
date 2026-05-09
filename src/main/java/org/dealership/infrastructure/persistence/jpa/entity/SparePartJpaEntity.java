@@ -57,6 +57,10 @@ public class SparePartJpaEntity extends BaseJpaEntity {
         newCompatibleModels.forEach(this::addCompatibleModel);
     }
 
+    public void removeCompatibleModel(SparePartCompatibilityJpaEntity compatibility) {
+        compatibleModels.remove(compatibility);
+    }
+
     public void setName(String name) {
         this.name = name;
     }

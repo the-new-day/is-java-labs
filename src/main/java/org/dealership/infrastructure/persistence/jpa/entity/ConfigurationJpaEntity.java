@@ -52,6 +52,10 @@ public class ConfigurationJpaEntity extends BaseJpaEntity {
         newComponentVariants.forEach(this::addComponentVariant);
     }
 
+    public void removeComponentVariant(ConfigurationComponentVariantJpaEntity componentVariant) {
+        componentVariants.remove(componentVariant);
+    }
+
     public void setCarModel(CarModelJpaEntity carModel) {
         this.carModel = carModel;
     }

@@ -12,5 +12,6 @@ public interface ConfigurationMapper {
     ConfigurationDto toDto(Configuration configuration);
 
     @Mapping(target = "model", source = "carModel")
+    @Mapping(target = "withVariant", ignore = true)
     Configuration toDomain(ConfigurationDto dto);
 }

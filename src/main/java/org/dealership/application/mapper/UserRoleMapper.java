@@ -4,10 +4,12 @@ import org.dealership.application.port.in.user.dto.UserRoleDto;
 import org.dealership.domain.exception.DomainValidationException;
 import org.dealership.domain.model.user.UserRole;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserRoleMapper {
 
+    @Mapping(target = "name", source = "role")
     UserRoleDto toDto(UserRole role);
 
     default UserRole toDomain(UserRoleDto dto) {

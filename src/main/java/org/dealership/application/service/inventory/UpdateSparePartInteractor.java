@@ -20,9 +20,8 @@ public class UpdateSparePartInteractor implements UpdateSparePartUseCase {
     public Response execute(Request request) {
         SparePartSummaryDto dto = request.sparePartSummaryDto();
         SparePartId partId = new SparePartId(dto.id());
-        if (sparePartRepository.findById(partId).isEmpty()) {
-            throw new EntityNotFoundException("Spare part not found: " + partId);
-        }
+        sparePartRepository.findById(partId)
+                .orElseThrow(() -> new EntityNotFoundException("Spare part not found: " + partId));
         sparePartRepository.save(sparePartMapper.toDomain(dto));
         return new Response();
     }
