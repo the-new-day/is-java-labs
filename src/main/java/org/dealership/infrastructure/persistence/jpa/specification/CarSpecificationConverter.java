@@ -27,6 +27,7 @@ public class CarSpecificationConverter {
             addBodyTypePredicate(predicates, modelJoin, cb, filter);
             addFuelTypePredicate(predicates, modelJoin, cb, filter);
             addDriveTypePredicate(predicates, modelJoin, cb, filter);
+            addTransmissionTypePredicate(predicates, modelJoin, cb, filter);
             addEnginePowerPredicates(predicates, modelJoin, cb, filter);
             addEngineVolumePredicates(predicates, modelJoin, cb, filter);
 
@@ -79,6 +80,14 @@ public class CarSpecificationConverter {
                                        CriteriaBuilder cb, CarFilter filter) {
         if (filter.driveType() != null) {
             predicates.add(cb.equal(modelJoin.get("driveType"), filter.driveType()));
+        }
+    }
+
+    private void addTransmissionTypePredicate(List<Predicate> predicates,
+                                              Join<?, CarModelJpaEntity> modelJoin,
+                                              CriteriaBuilder cb, CarFilter filter) {
+        if (filter.transmissionType() != null) {
+            predicates.add(cb.equal(modelJoin.get("baseTransmissionType"), filter.transmissionType()));
         }
     }
 

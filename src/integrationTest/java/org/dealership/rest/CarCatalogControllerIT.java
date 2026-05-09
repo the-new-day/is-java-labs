@@ -15,6 +15,7 @@ class CarCatalogControllerIT extends AbstractIntegrationTest {
 
     private static final UUID CAR_ID = UUID.fromString("00000000-0000-0000-0000-000000000501");
     private static final UUID MODEL_ID = UUID.fromString("00000000-0000-0000-0000-000000000101");
+    private static final UUID BRAND_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
     @Autowired
     private MockMvc mockMvc;
@@ -63,5 +64,164 @@ class CarCatalogControllerIT extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.modelSummaryList").isArray())
                 .andExpect(jsonPath("$.modelSummaryList.length()").value(3));
+    }
+
+    @Test
+    void listCars_filterByMatchingColor_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("color", "BLACK"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByNonMatchingColor_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("color", "WHITE"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(0));
+    }
+
+    @Test
+    void listCars_filterByBrandId_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("brandId", BRAND_ID.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByModelId_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("modelId", MODEL_ID.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByBodyType_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("bodyType", "SEDAN"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByNonMatchingBodyType_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("bodyType", "SUV"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(0));
+    }
+
+    @Test
+    void listCars_filterByFuelType_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("fuelType", "PETROL"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByDriveType_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("driveType", "REAR"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByEnginePowerRange_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars")
+                        .param("minEnginePower", "180")
+                        .param("maxEnginePower", "200"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByTooHighMinEnginePower_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("minEnginePower", "300"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(0));
+    }
+
+    @Test
+    void listCars_filterByEngineVolumeRange_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars")
+                        .param("minEngineVolume", "1.5")
+                        .param("maxEngineVolume", "2.5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByTooLowMaxEngineVolume_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("maxEngineVolume", "1.5"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(0));
+    }
+
+    @Test
+    void listCars_filterByCombinedMatchingParams_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars")
+                        .param("color", "BLACK")
+                        .param("bodyType", "SEDAN")
+                        .param("fuelType", "PETROL")
+                        .param("brandId", BRAND_ID.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByCombinedNonMatchingParams_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars")
+                        .param("color", "WHITE")
+                        .param("bodyType", "SEDAN"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(0));
+    }
+
+    @Test
+    void listCars_filterByTransmissionType_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("transmissionType", "AUTOMATIC"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByNonMatchingTransmissionType_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("transmissionType", "MANUAL"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(0));
+    }
+
+    @Test
+    void listCars_filterByMinPrice_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("minPrice", "3000000"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByMinPriceAboveCarPrice_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("minPrice", "4000000"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(0));
+    }
+
+    @Test
+    void listCars_filterByMaxPrice_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("maxPrice", "4000000"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
+    }
+
+    @Test
+    void listCars_filterByMaxPriceBelowCarPrice_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars").param("maxPrice", "3000000"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(0));
+    }
+
+    @Test
+    void listCars_filterByPriceRange_returnsOne() throws Exception {
+        mockMvc.perform(get("/api/catalog/cars")
+                        .param("minPrice", "3000000")
+                        .param("maxPrice", "4000000"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.carSummaryList.length()").value(1));
     }
 }

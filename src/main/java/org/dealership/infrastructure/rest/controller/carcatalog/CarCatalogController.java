@@ -5,9 +5,11 @@ import org.dealership.application.port.in.carcatalog.GetModelUseCase;
 import org.dealership.application.port.in.carcatalog.ListCarsUseCase;
 import org.dealership.application.port.in.carcatalog.ListModelsUseCase;
 import org.dealership.application.port.in.carcatalog.dto.CarFilterDto;
+import org.dealership.application.port.in.common.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
@@ -36,8 +38,26 @@ public class CarCatalogController {
 
     @GetMapping("/cars")
     public ResponseEntity<ListCarsUseCase.Response> listCars(
-            @RequestBody(required = false) CarFilterDto filter
+            @RequestParam(required = false) MoneyDto minPrice,
+            @RequestParam(required = false) MoneyDto maxPrice,
+            @RequestParam(required = false) UUID brandId,
+            @RequestParam(required = false) UUID modelId,
+            @RequestParam(required = false) CarBodyTypeDto bodyType,
+            @RequestParam(required = false) FuelTypeDto fuelType,
+            @RequestParam(required = false) Integer minEnginePower,
+            @RequestParam(required = false) Integer maxEnginePower,
+            @RequestParam(required = false) Double minEngineVolume,
+            @RequestParam(required = false) Double maxEngineVolume,
+            @RequestParam(required = false) TransmissionTypeDto transmissionType,
+            @RequestParam(required = false) DriveTypeDto driveType,
+            @RequestParam(required = false) ColorDto color
     ) {
+        CarFilterDto filter = new CarFilterDto(
+                minPrice, maxPrice, brandId, modelId, bodyType, fuelType,
+                minEnginePower, maxEnginePower, minEngineVolume, maxEngineVolume,
+                transmissionType, driveType, color
+        );
+
         return ResponseEntity.ok(listCarsUseCase.execute(new ListCarsUseCase.Request(filter)));
     }
 

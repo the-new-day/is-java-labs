@@ -17,5 +17,6 @@ public record CarFilter(
         Integer maxEnginePower,
         Double minEngineVolume,
         Double maxEngineVolume,
-        FuelType fuelType
+        FuelType fuelType,
+        TransmissionType transmissionType
 ) {}
