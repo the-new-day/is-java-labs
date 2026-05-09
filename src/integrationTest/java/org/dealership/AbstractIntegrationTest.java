@@ -4,24 +4,28 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Testcontainers
 public abstract class AbstractIntegrationTest {
 
-    @Container
-    static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
+    static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:16-alpine")
             .withDatabaseName("testdb")
             .withUsername("test")
-            .withPassword("test")
-            .withReuse(true);
+            .withPassword("test");
+
+    static {
+        postgres.start();
+    }
 
     @DynamicPropertySource
     static void configureDataSource(DynamicPropertyRegistry registry) {
+        System.out.println("=== CONTAINER STATUS ===");
+        System.out.println("Running: " + postgres.isRunning());
+        System.out.println("JDBC URL: " + postgres.getJdbcUrl());
+        System.out.println("Container ID: " + postgres.getContainerId());
+
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
