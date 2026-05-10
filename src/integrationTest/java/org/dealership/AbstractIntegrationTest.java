@@ -21,11 +21,6 @@ public abstract class AbstractIntegrationTest {
 
     @DynamicPropertySource
     static void configureDataSource(DynamicPropertyRegistry registry) {
-        System.out.println("=== CONTAINER STATUS ===");
-        System.out.println("Running: " + postgres.isRunning());
-        System.out.println("JDBC URL: " + postgres.getJdbcUrl());
-        System.out.println("Container ID: " + postgres.getContainerId());
-
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
