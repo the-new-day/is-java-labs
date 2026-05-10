@@ -11,6 +11,20 @@ spring:
     open-in-view: false
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8081/realms/dealership}
+
+dealership:
+  security:
+    keycloak:
+      server-url: ${KEYCLOAK_SERVER_URL:http://localhost:8081}
+      realm: ${KEYCLOAK_REALM:dealership}
+      manager-realm-role: MANAGER
+      admin-client-id: ${KEYCLOAK_ADMIN_CLIENT_ID:dealership-admin}
+      admin-client-secret: ${KEYCLOAK_ADMIN_CLIENT_SECRET:dealership-admin-secret}
 
 springdoc:
   swagger-ui:

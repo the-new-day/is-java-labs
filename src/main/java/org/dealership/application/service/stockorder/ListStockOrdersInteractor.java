@@ -3,6 +3,10 @@ package org.dealership.application.service.stockorder;
 import org.dealership.application.mapper.StockOrderMapper;
 import org.dealership.application.port.in.stockorder.ListStockOrdersUseCase;
 import org.dealership.application.port.out.persistence.StockCarOrderRepository;
+import org.dealership.domain.model.id.UserId;
+import org.dealership.domain.model.order.StockCarOrder;
+
+import java.util.List;
 
 public class ListStockOrdersInteractor implements ListStockOrdersUseCase {
     private final StockCarOrderRepository stockOrderRepository;
@@ -15,10 +19,9 @@ public class ListStockOrdersInteractor implements ListStockOrdersUseCase {
 
     @Override
     public Response execute(Request request) {
-        return new Response(
-                stockOrderRepository.findAll().stream()
-                        .map(stockOrderMapper::toDto)
-                        .toList()
-        );
+        List<StockCarOrder> orders = request.clientIdFilter() == null
+                ? stockOrderRepository.findAll()
+                : stockOrderRepository.findByClientId(new UserId(request.clientIdFilter()));
+        return new Response(orders.stream().map(stockOrderMapper::toDto).toList());
     }
 }

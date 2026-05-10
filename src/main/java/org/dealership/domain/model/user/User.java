@@ -6,12 +6,10 @@ import org.dealership.domain.validation.DomainChecks;
 public class User {
     private final UserId id;
     private final String fullName;
-    private final UserRole role;
 
-    public User(UserId id, String fullName, UserRole role) {
+    public User(UserId id, String fullName) {
         this.id = DomainChecks.notNull(id, "userId");
         this.fullName = DomainChecks.notBlank(fullName, "fullName");
-        this.role = DomainChecks.notNull(role, "role");
     }
 
     public UserId getId() {
@@ -20,9 +18,5 @@ public class User {
 
     public String getFullName() {
         return fullName;
-    }
-
-    public UserRole getRole() {
-        return role;
     }
 }

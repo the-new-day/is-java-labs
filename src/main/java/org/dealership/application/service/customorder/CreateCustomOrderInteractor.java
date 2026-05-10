@@ -5,7 +5,7 @@ import org.dealership.application.port.in.customorder.CreateCustomOrderUseCase;
 import org.dealership.application.port.in.common.dto.ConfigurationDto;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.port.out.persistence.CustomCarOrderRepository;
-import org.dealership.application.port.out.persistence.UserRepository;
+import org.dealership.application.port.out.security.ManagerProvider;
 import org.dealership.domain.exception.EntityNotFoundException;
 import org.dealership.domain.model.configuration.Configuration;
 import org.dealership.domain.model.id.CarModelId;
@@ -13,28 +13,26 @@ import org.dealership.domain.model.id.UserId;
 import org.dealership.domain.model.order.CustomCarOrder;
 import org.dealership.domain.model.user.UserSelectionStrategy;
 import org.dealership.domain.model.order.state.CustomCarOrderStatus;
-import org.dealership.domain.model.user.User;
-import org.dealership.domain.model.user.UserRole;
 
 import java.util.List;
 
 public class CreateCustomOrderInteractor implements CreateCustomOrderUseCase {
     private final CustomCarOrderRepository customOrderRepository;
     private final CarModelRepository carModelRepository;
-    private final UserRepository userRepository;
+    private final ManagerProvider managerProvider;
     private final UserSelectionStrategy userSelectionStrategy;
     private final ConfigurationMapper configurationMapper;
 
     public CreateCustomOrderInteractor(
             CustomCarOrderRepository customOrderRepository,
             CarModelRepository carModelRepository,
-            UserRepository userRepository,
+            ManagerProvider managerProvider,
             UserSelectionStrategy userSelectionStrategy,
             ConfigurationMapper configurationMapper
     ) {
         this.customOrderRepository = customOrderRepository;
         this.carModelRepository = carModelRepository;
-        this.userRepository = userRepository;
+        this.managerProvider = managerProvider;
         this.userSelectionStrategy = userSelectionStrategy;
         this.configurationMapper = configurationMapper;
     }
@@ -47,10 +45,7 @@ public class CreateCustomOrderInteractor implements CreateCustomOrderUseCase {
                 .orElseThrow(() -> new EntityNotFoundException("Car model not found: " + modelId));
         Configuration configuration = configurationMapper.toDomain(configurationDto);
 
-        List<UserId> managers = userRepository.findByRole(UserRole.MANAGER)
-                .stream()
-                .map(User::getId)
-                .toList();
+        List<UserId> managers = managerProvider.listManagerIds();
 
         CustomCarOrder order = new CustomCarOrder(
                 customOrderRepository.nextId(),

@@ -22,8 +22,8 @@ class InventoryCarControllerIT extends AbstractIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    void getCar_existingCar_returns200WithCarDetails() throws Exception {
-        mockMvc.perform(get("/api/inventory/cars/{id}", CAR_ID))
+    void getCar_warehouseAdmin_returns200WithCarDetails() throws Exception {
+        mockMvc.perform(get("/api/inventory/cars/{id}", CAR_ID).with(asWarehouseAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.carDetails.id").value(CAR_ID.toString()))
                 .andExpect(jsonPath("$.carDetails.testDriveAvailable").value(true))
@@ -31,31 +31,43 @@ class InventoryCarControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
+    void getCar_clientForbidden_returns403() throws Exception {
+        mockMvc.perform(get("/api/inventory/cars/{id}", CAR_ID).with(asClient()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void getCar_nonExistingCar_returns404() throws Exception {
-        mockMvc.perform(get("/api/inventory/cars/{id}", UUID.randomUUID()))
+        mockMvc.perform(get("/api/inventory/cars/{id}", UUID.randomUUID()).with(asWarehouseAdmin()))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void listCars_returns200WithList() throws Exception {
-        mockMvc.perform(get("/api/inventory/cars"))
+        mockMvc.perform(get("/api/inventory/cars").with(asWarehouseAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.carSummaryList").isArray())
                 .andExpect(jsonPath("$.carSummaryList.length()").value(1));
     }
 
     @Test
-    void deleteCar_existingCar_returns204() throws Exception {
-        mockMvc.perform(delete("/api/inventory/cars/{id}", CAR_ID))
+    void deleteCar_admin_returns204() throws Exception {
+        mockMvc.perform(delete("/api/inventory/cars/{id}", CAR_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
+    void deleteCar_warehouseAdminForbidden_returns403() throws Exception {
+        mockMvc.perform(delete("/api/inventory/cars/{id}", CAR_ID).with(asWarehouseAdmin()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void deleteCar_thenGet_returns404() throws Exception {
-        mockMvc.perform(delete("/api/inventory/cars/{id}", CAR_ID))
+        mockMvc.perform(delete("/api/inventory/cars/{id}", CAR_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/inventory/cars/{id}", CAR_ID))
+        mockMvc.perform(get("/api/inventory/cars/{id}", CAR_ID).with(asWarehouseAdmin()))
                 .andExpect(status().isNotFound());
     }
 }

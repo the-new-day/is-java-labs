@@ -4,6 +4,7 @@ import org.dealership.application.port.in.inventory.*;
 import org.dealership.application.port.in.inventory.dto.NewSparePartDto;
 import org.dealership.application.port.in.inventory.dto.SparePartSummaryDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/inventory/spare-parts")
+@PreAuthorize("hasAnyRole('WAREHOUSE_ADMIN','ADMIN')")
 public class InventorySparePartController {
 
     private final AddSparePartUseCase addSparePartUseCase;
@@ -34,7 +36,8 @@ public class InventorySparePartController {
 
     @PostMapping
     public ResponseEntity<AddSparePartUseCase.Response> addSparePart(@RequestBody NewSparePartDto newSparePart) {
-        AddSparePartUseCase.Response response = addSparePartUseCase.execute(new AddSparePartUseCase.Request(newSparePart));
+        AddSparePartUseCase.Response response
+                = addSparePartUseCase.execute(new AddSparePartUseCase.Request(newSparePart));
         return ResponseEntity.created(URI.create("/api/inventory/spare-parts/" + response.id())).body(response);
     }
 
@@ -55,6 +58,7 @@ public class InventorySparePartController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteSparePart(@PathVariable UUID id) {
         deleteSparePartUseCase.execute(new DeleteSparePartUseCase.Request(id));
         return ResponseEntity.noContent().build();

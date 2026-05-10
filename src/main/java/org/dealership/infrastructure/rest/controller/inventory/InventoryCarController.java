@@ -4,6 +4,7 @@ import org.dealership.application.port.in.inventory.*;
 import org.dealership.application.port.in.inventory.dto.NewCarDetailsDto;
 import org.dealership.application.port.in.common.dto.CarDetailsDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/inventory/cars")
+@PreAuthorize("hasAnyRole('WAREHOUSE_ADMIN','ADMIN')")
 public class InventoryCarController {
     private final AddCarUseCase addCarUseCase;
     private final GetInventoryCarUseCase getInventoryCarUseCase;
@@ -54,6 +56,7 @@ public class InventoryCarController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCar(@PathVariable UUID id) {
         deleteCarUseCase.execute(new DeleteCarUseCase.Request(id));
         return ResponseEntity.noContent().build();

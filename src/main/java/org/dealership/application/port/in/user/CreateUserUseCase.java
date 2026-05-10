@@ -1,13 +1,11 @@
 package org.dealership.application.port.in.user;
 
-import org.dealership.application.port.in.user.dto.UserRoleDto;
-
 import java.util.UUID;
 
 public interface CreateUserUseCase {
     Response execute(Request request);
 
-    record Request(String fullName, UserRoleDto role) {}
+    record Request(UUID id, String fullName) {}
 
     record Response(UUID id) {}
 }

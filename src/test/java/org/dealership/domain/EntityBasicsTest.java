@@ -7,7 +7,6 @@ import org.dealership.domain.model.id.*;
 import org.dealership.domain.model.part.SparePart;
 import org.dealership.domain.model.testdrive.TestDriveRequest;
 import org.dealership.domain.model.user.User;
-import org.dealership.domain.model.user.UserRole;
 import org.dealership.domain.model.vo.Money;
 import org.junit.jupiter.api.Test;
 
@@ -27,10 +26,9 @@ class EntityBasicsTest {
         assertEquals("BMW", brand.getName());
 
         UserId userId = new UserId(UUID.randomUUID());
-        User user = new User(userId, "Alice", UserRole.CLIENT);
+        User user = new User(userId, "Alice");
         assertEquals(userId, user.getId());
         assertEquals("Alice", user.getFullName());
-        assertEquals(UserRole.CLIENT, user.getRole());
     }
 
     @Test

@@ -15,7 +15,6 @@ import org.dealership.application.port.in.stockorder.dto.StockOrderDto;
 import org.dealership.application.port.in.stockorder.dto.StockOrderStatusDto;
 import org.dealership.application.port.in.testdrive.dto.TestDriveRequestDto;
 import org.dealership.application.port.in.user.dto.UserDto;
-import org.dealership.application.port.in.user.dto.UserRoleDto;
 import org.dealership.domain.model.car.Brand;
 import org.dealership.domain.model.car.Car;
 import org.dealership.domain.model.car.CarModel;
@@ -28,7 +27,6 @@ import org.dealership.domain.model.order.state.StockCarOrderStatus;
 import org.dealership.domain.model.part.SparePart;
 import org.dealership.domain.model.testdrive.TestDriveRequest;
 import org.dealership.domain.model.user.User;
-import org.dealership.domain.model.user.UserRole;
 import org.dealership.domain.model.vo.Money;
 import org.dealership.domain.model.vo.VinNumber;
 
@@ -167,8 +165,8 @@ public final class ServiceTestData {
         return new TestDriveRequestDto(id, clientId, carId, startsAt);
     }
 
-    public static UserDto userDto(UUID id, String fullName, String role) {
-        return new UserDto(id, fullName, new UserRoleDto(role));
+    public static UserDto userDto(UUID id, String fullName) {
+        return new UserDto(id, fullName);
     }
 
     public static NewModelDto newModelDto(UUID brandId) {
@@ -243,10 +241,6 @@ public final class ServiceTestData {
     }
 
     public static User user(UUID userId) {
-        return user(userId, UserRole.CLIENT);
-    }
-
-    public static User user(UUID userId, UserRole role) {
-        return new User(new UserId(userId), "Full Name", role);
+        return new User(new UserId(userId), "Full Name");
     }
 }

@@ -25,15 +25,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TestDriveControllerIT extends AbstractIntegrationTest {
 
     private static final UUID REQUEST_ID = UUID.fromString("00000000-0000-0000-0000-000000000653");
-    private static final UUID CLIENT_ID = UUID.fromString("00000000-0000-0000-0000-000000000301");
+    private static final UUID CLIENT_ID = SEED_CLIENT_ID;
     private static final UUID CAR_ID = UUID.fromString("00000000-0000-0000-0000-000000000501");
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void getTestDriveRequest_existing_returns200() throws Exception {
-        mockMvc.perform(get("/api/test-drives/{id}", REQUEST_ID))
+    void getTestDriveRequest_admin_returns200() throws Exception {
+        mockMvc.perform(get("/api/test-drives/{id}", REQUEST_ID).with(asAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.testDriveRequest.id").value(REQUEST_ID.toString()))
                 .andExpect(jsonPath("$.testDriveRequest.clientId").value(CLIENT_ID.toString()))
@@ -42,28 +42,32 @@ class TestDriveControllerIT extends AbstractIntegrationTest {
 
     @Test
     void getTestDriveRequest_nonExisting_returns404() throws Exception {
-        mockMvc.perform(get("/api/test-drives/{id}", UUID.randomUUID()))
+        mockMvc.perform(get("/api/test-drives/{id}", UUID.randomUUID()).with(asAdmin()))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void listTestDriveRequests_returns200WithList() throws Exception {
-        mockMvc.perform(get("/api/test-drives"))
+    void getTestDriveRequest_unauthenticated_returns401() throws Exception {
+        mockMvc.perform(get("/api/test-drives/{id}", REQUEST_ID))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void listTestDriveRequests_managerSeesAll_returns200() throws Exception {
+        mockMvc.perform(get("/api/test-drives").with(asManager()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.testDriveRequest").isArray())
                 .andExpect(jsonPath("$.testDriveRequest.length()").value(1));
     }
 
     @Test
-    void createTestDriveRequest_validRequest_returns201WithLocationHeader() throws Exception {
-        String requestBody = String.format(
-                """
-                {"clientId": "%s", "carId": "%s", "startsAt": "2026-07-01T10:00:00"}
-                """,
-                CLIENT_ID, CAR_ID
-        );
+    void createTestDriveRequest_clientCanCreate_returns201() throws Exception {
+        String requestBody = String.format("""
+                {"carId": "%s", "startsAt": "2026-07-01T10:00:00"}
+                """, CAR_ID);
 
         MvcResult result = mockMvc.perform(post("/api/test-drives")
+                        .with(asClient())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated())
@@ -74,14 +78,14 @@ class TestDriveControllerIT extends AbstractIntegrationTest {
         String location = result.getResponse().getHeader("Location");
         assertThat(location).isNotNull();
 
-        mockMvc.perform(get(location))
+        mockMvc.perform(get(location).with(asClient()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.testDriveRequest.clientId").value(CLIENT_ID.toString()))
                 .andExpect(jsonPath("$.testDriveRequest.carId").value(CAR_ID.toString()));
     }
 
     @Test
-    void updateTestDriveRequest_existingRequest_returns200() throws Exception {
+    void updateTestDriveRequest_managerCanUpdate_returns200() throws Exception {
         String requestBody = String.format(
                 """
                 {"id": "%s", "clientId": "%s", "carId": "%s", "startsAt": "2026-08-01T15:30:00"}
@@ -90,34 +94,44 @@ class TestDriveControllerIT extends AbstractIntegrationTest {
         );
 
         mockMvc.perform(put("/api/test-drives/{id}", REQUEST_ID)
+                        .with(asManager())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void deleteTestDriveRequest_existing_returns204() throws Exception {
-        mockMvc.perform(delete("/api/test-drives/{id}", REQUEST_ID))
+    void deleteTestDriveRequest_owner_returns204() throws Exception {
+        mockMvc.perform(delete("/api/test-drives/{id}", REQUEST_ID).with(asClient()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void deleteTestDriveRequest_thenGet_returns404() throws Exception {
-        mockMvc.perform(delete("/api/test-drives/{id}", REQUEST_ID))
+        mockMvc.perform(delete("/api/test-drives/{id}", REQUEST_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/test-drives/{id}", REQUEST_ID))
+        mockMvc.perform(get("/api/test-drives/{id}", REQUEST_ID).with(asAdmin()))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void setTestDriveAvailable_existingCar_returns200() throws Exception {
+    void setTestDriveAvailable_warehouseAdmin_returns200() throws Exception {
         mockMvc.perform(patch("/api/test-drives/cars/{carId}/availability", CAR_ID)
+                        .with(asWarehouseAdmin())
                         .param("available", "false"))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/api/catalog/cars/{id}", CAR_ID))
+        mockMvc.perform(get("/api/catalog/cars/{id}", CAR_ID).with(asClient()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.carDetails.testDriveAvailable").value(false));
+    }
+
+    @Test
+    void setTestDriveAvailable_clientForbidden_returns403() throws Exception {
+        mockMvc.perform(patch("/api/test-drives/cars/{carId}/availability", CAR_ID)
+                        .with(asClient())
+                        .param("available", "false"))
+                .andExpect(status().isForbidden());
     }
 }

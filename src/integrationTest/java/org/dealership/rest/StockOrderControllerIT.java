@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class StockOrderControllerIT extends AbstractIntegrationTest {
 
     private static final UUID ORDER_ID = UUID.fromString("00000000-0000-0000-0000-000000000651");
-    private static final UUID CLIENT_ID = UUID.fromString("00000000-0000-0000-0000-000000000301");
+    private static final UUID CLIENT_ID = SEED_CLIENT_ID;
     private static final UUID CAR_ID = UUID.fromString("00000000-0000-0000-0000-000000000501");
 
     @Autowired
@@ -32,7 +32,7 @@ class StockOrderControllerIT extends AbstractIntegrationTest {
 
     @Test
     void getStockOrder_existingOrder_returns200() throws Exception {
-        mockMvc.perform(get("/api/stock-orders/{id}", ORDER_ID))
+        mockMvc.perform(get("/api/stock-orders/{id}", ORDER_ID).with(asAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.order.id").value(ORDER_ID.toString()))
                 .andExpect(jsonPath("$.order.clientId").value(CLIENT_ID.toString()))
@@ -42,28 +42,39 @@ class StockOrderControllerIT extends AbstractIntegrationTest {
 
     @Test
     void getStockOrder_nonExistingOrder_returns404() throws Exception {
-        mockMvc.perform(get("/api/stock-orders/{id}", UUID.randomUUID()))
+        mockMvc.perform(get("/api/stock-orders/{id}", UUID.randomUUID()).with(asAdmin()))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void listStockOrders_returns200WithList() throws Exception {
-        mockMvc.perform(get("/api/stock-orders"))
+    void getStockOrder_unauthenticated_returns401() throws Exception {
+        mockMvc.perform(get("/api/stock-orders/{id}", ORDER_ID))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void listStockOrders_managerSeesAll_returns200() throws Exception {
+        mockMvc.perform(get("/api/stock-orders").with(asManager()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.order").isArray())
                 .andExpect(jsonPath("$.order.length()").value(1));
     }
 
     @Test
-    void createStockOrder_validRequest_returns201WithLocationHeader() throws Exception {
-        String requestBody = String.format(
-                """
-                {"clientId": "%s", "carId": "%s"}
-                """,
-                CLIENT_ID, CAR_ID
-        );
+    void listStockOrders_clientSeesOwn_returns200() throws Exception {
+        mockMvc.perform(get("/api/stock-orders").with(asClient()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.order.length()").value(1));
+    }
+
+    @Test
+    void createStockOrder_clientCanCreate_returns201() throws Exception {
+        String requestBody = String.format("""
+                {"carId": "%s"}
+                """, CAR_ID);
 
         MvcResult result = mockMvc.perform(post("/api/stock-orders")
+                        .with(asClient())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated())
@@ -74,39 +85,53 @@ class StockOrderControllerIT extends AbstractIntegrationTest {
         String location = result.getResponse().getHeader("Location");
         assertThat(location).isNotNull();
 
-        mockMvc.perform(get(location))
+        mockMvc.perform(get(location).with(asClient()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.order.clientId").value(CLIENT_ID.toString()))
                 .andExpect(jsonPath("$.order.carId").value(CAR_ID.toString()));
     }
 
     @Test
-    void updateStockOrder_existingOrder_returns200() throws Exception {
+    void createStockOrder_adminForbidden_returns403() throws Exception {
+        String requestBody = String.format("""
+                {"carId": "%s"}
+                """, CAR_ID);
+
+        mockMvc.perform(post("/api/stock-orders")
+                        .with(asAdmin())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void updateStockOrder_managerCanUpdate_returns200() throws Exception {
         String requestBody = String.format(
                 """
                 {"id": "%s", "clientId": "%s", "managerId": "%s", "carId": "%s", "status": {"name": "CONFIRMED"}}
                 """,
-                ORDER_ID, CLIENT_ID, "00000000-0000-0000-0000-000000000302", CAR_ID
+                ORDER_ID, CLIENT_ID, SEED_MANAGER_ID, CAR_ID
         );
 
         mockMvc.perform(put("/api/stock-orders/{id}", ORDER_ID)
+                        .with(asManager())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void deleteStockOrder_existingOrder_returns204() throws Exception {
-        mockMvc.perform(delete("/api/stock-orders/{id}", ORDER_ID))
+    void deleteStockOrder_owner_returns204() throws Exception {
+        mockMvc.perform(delete("/api/stock-orders/{id}", ORDER_ID).with(asClient()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
     void deleteStockOrder_thenGet_returns404() throws Exception {
-        mockMvc.perform(delete("/api/stock-orders/{id}", ORDER_ID))
+        mockMvc.perform(delete("/api/stock-orders/{id}", ORDER_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/stock-orders/{id}", ORDER_ID))
+        mockMvc.perform(get("/api/stock-orders/{id}", ORDER_ID).with(asAdmin()))
                 .andExpect(status().isNotFound());
     }
 }

@@ -5,7 +5,7 @@ import org.dealership.domain.model.user.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {BaseIdMapper.class, UserRoleMapper.class})
+@Mapper(componentModel = "spring", uses = {BaseIdMapper.class})
 public interface UserMapper {
 
     @Mapping(target = "id", source = "id.value")

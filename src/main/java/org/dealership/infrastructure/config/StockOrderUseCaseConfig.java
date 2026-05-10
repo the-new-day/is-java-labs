@@ -9,7 +9,7 @@ import org.dealership.application.port.in.stockorder.ListStockOrdersUseCase;
 import org.dealership.application.port.in.stockorder.UpdateStockOrderUseCase;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.application.port.out.persistence.StockCarOrderRepository;
-import org.dealership.application.port.out.persistence.UserRepository;
+import org.dealership.application.port.out.security.ManagerProvider;
 import org.dealership.application.service.stockorder.CreateStockOrderInteractor;
 import org.dealership.application.service.stockorder.DeleteStockOrderInteractor;
 import org.dealership.application.service.stockorder.GetStockOrderInteractor;
@@ -26,13 +26,13 @@ public class StockOrderUseCaseConfig {
     public CreateStockOrderUseCase createStockOrderUseCase(
             StockCarOrderRepository stockCarOrderRepository,
             CarRepository carRepository,
-            UserRepository userRepository,
+            ManagerProvider managerProvider,
             UserSelectionStrategy userSelectionStrategy
     ) {
         return new CreateStockOrderInteractor(
                 stockCarOrderRepository,
                 carRepository,
-                userRepository,
+                managerProvider,
                 userSelectionStrategy);
     }
 

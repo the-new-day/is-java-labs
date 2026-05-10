@@ -29,7 +29,7 @@ class GetUserInteractorTest {
         UUID userIdValue = UUID.randomUUID();
         User user = ServiceTestData.user(userIdValue);
         when(userRepository.findById(new UserId(userIdValue))).thenReturn(Optional.of(user));
-        when(userMapper.toDto(user)).thenReturn(ServiceTestData.userDto(userIdValue, "Full Name", "CLIENT"));
+        when(userMapper.toDto(user)).thenReturn(ServiceTestData.userDto(userIdValue, "Full Name"));
 
         GetUserInteractor interactor = new GetUserInteractor(userRepository, userMapper);
         var response = interactor.execute(new GetUserUseCase.Request(userIdValue));

@@ -4,7 +4,6 @@ import org.dealership.application.port.out.persistence.UserRepository;
 import org.dealership.domain.exception.EntityNotFoundException;
 import org.dealership.domain.model.id.UserId;
 import org.dealership.domain.model.user.User;
-import org.dealership.domain.model.user.UserRole;
 import org.dealership.infrastructure.persistence.jpa.entity.UserJpaEntity;
 import org.dealership.infrastructure.persistence.jpa.mapper.UserJpaMapper;
 import org.dealership.infrastructure.persistence.jpa.repository.UserJpaRepository;
@@ -39,7 +38,6 @@ public class UserJpaAdapter implements UserRepository {
         if (existing.isPresent()) {
             UserJpaEntity entity = existing.get();
             entity.setFullName(user.getFullName());
-            entity.setRole(user.getRole());
             userJpaRepository.save(entity);
         } else {
             userJpaRepository.save(userJpaMapper.toEntity(user));
@@ -50,13 +48,6 @@ public class UserJpaAdapter implements UserRepository {
     public Optional<User> findById(UserId id) {
         return userJpaRepository.findByIdAndRemovedFalse(id.value())
                 .map(userJpaMapper::toDomain);
-    }
-
-    @Override
-    public List<User> findByRole(UserRole role) {
-        return userJpaRepository.findAllByRoleAndRemovedFalse(role).stream()
-                .map(userJpaMapper::toDomain)
-                .toList();
     }
 
     @Override

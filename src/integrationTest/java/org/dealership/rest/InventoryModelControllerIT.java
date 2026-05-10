@@ -21,17 +21,23 @@ class InventoryModelControllerIT extends AbstractIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    void deleteModel_existingModel_returns204() throws Exception {
-        mockMvc.perform(delete("/api/inventory/models/{id}", MODEL_ID))
+    void deleteModel_admin_returns204() throws Exception {
+        mockMvc.perform(delete("/api/inventory/models/{id}", MODEL_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
+    void deleteModel_warehouseAdminForbidden_returns403() throws Exception {
+        mockMvc.perform(delete("/api/inventory/models/{id}", MODEL_ID).with(asWarehouseAdmin()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void deleteModel_thenCatalogGet_returns404() throws Exception {
-        mockMvc.perform(delete("/api/inventory/models/{id}", MODEL_ID))
+        mockMvc.perform(delete("/api/inventory/models/{id}", MODEL_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/catalog/models/{id}", MODEL_ID))
+        mockMvc.perform(get("/api/catalog/models/{id}", MODEL_ID).with(asClient()))
                 .andExpect(status().isNotFound());
     }
 }

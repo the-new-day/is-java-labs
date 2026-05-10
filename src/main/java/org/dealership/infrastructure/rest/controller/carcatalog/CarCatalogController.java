@@ -7,13 +7,14 @@ import org.dealership.application.port.in.carcatalog.ListModelsUseCase;
 import org.dealership.application.port.in.carcatalog.dto.CarFilterDto;
 import org.dealership.application.port.in.common.dto.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/catalog")
+@PreAuthorize("isAuthenticated()")
 public class CarCatalogController {
     private final GetCarUseCase getCarUseCase;
     private final ListCarsUseCase listCarsUseCase;

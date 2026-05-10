@@ -30,29 +30,35 @@ class InventorySparePartControllerIT extends AbstractIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    void getSparePart_existing_returns200() throws Exception {
-        mockMvc.perform(get("/api/inventory/spare-parts/{id}", SPARE_PART_ID))
+    void getSparePart_warehouseAdmin_returns200() throws Exception {
+        mockMvc.perform(get("/api/inventory/spare-parts/{id}", SPARE_PART_ID).with(asWarehouseAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.sparePartSummaryDto.id").value(SPARE_PART_ID.toString()))
                 .andExpect(jsonPath("$.sparePartSummaryDto.name").value("BMW Brake Pads Set"));
     }
 
     @Test
+    void getSparePart_clientForbidden_returns403() throws Exception {
+        mockMvc.perform(get("/api/inventory/spare-parts/{id}", SPARE_PART_ID).with(asClient()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void getSparePart_nonExisting_returns404() throws Exception {
-        mockMvc.perform(get("/api/inventory/spare-parts/{id}", UUID.randomUUID()))
+        mockMvc.perform(get("/api/inventory/spare-parts/{id}", UUID.randomUUID()).with(asWarehouseAdmin()))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void listSpareParts_returns200WithList() throws Exception {
-        mockMvc.perform(get("/api/inventory/spare-parts"))
+        mockMvc.perform(get("/api/inventory/spare-parts").with(asWarehouseAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.sparePartSummaryDtoList").isArray())
                 .andExpect(jsonPath("$.sparePartSummaryDtoList.length()").value(1));
     }
 
     @Test
-    void addSparePart_validRequest_returns201WithLocationHeader() throws Exception {
+    void addSparePart_validRequest_returns201() throws Exception {
         String requestBody = String.format(
                 """
                 {"name": "Wiper Blades", "price": {"amount": 4500.00}, "compatibleModelIds": ["%s"]}
@@ -61,6 +67,7 @@ class InventorySparePartControllerIT extends AbstractIntegrationTest {
         );
 
         MvcResult result = mockMvc.perform(post("/api/inventory/spare-parts")
+                        .with(asWarehouseAdmin())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated())
@@ -71,7 +78,7 @@ class InventorySparePartControllerIT extends AbstractIntegrationTest {
         String location = result.getResponse().getHeader("Location");
         assertThat(location).isNotNull();
 
-        mockMvc.perform(get(location))
+        mockMvc.perform(get(location).with(asWarehouseAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.sparePartSummaryDto.name").value("Wiper Blades"));
     }
@@ -86,27 +93,34 @@ class InventorySparePartControllerIT extends AbstractIntegrationTest {
         );
 
         mockMvc.perform(put("/api/inventory/spare-parts/{id}", SPARE_PART_ID)
+                        .with(asWarehouseAdmin())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/api/inventory/spare-parts/{id}", SPARE_PART_ID))
+        mockMvc.perform(get("/api/inventory/spare-parts/{id}", SPARE_PART_ID).with(asWarehouseAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.sparePartSummaryDto.name").value("BMW Brake Pads Set Premium"));
     }
 
     @Test
-    void deleteSparePart_existing_returns204() throws Exception {
-        mockMvc.perform(delete("/api/inventory/spare-parts/{id}", SPARE_PART_ID))
+    void deleteSparePart_admin_returns204() throws Exception {
+        mockMvc.perform(delete("/api/inventory/spare-parts/{id}", SPARE_PART_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
+    void deleteSparePart_warehouseAdminForbidden_returns403() throws Exception {
+        mockMvc.perform(delete("/api/inventory/spare-parts/{id}", SPARE_PART_ID).with(asWarehouseAdmin()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void deleteSparePart_thenGet_returns404() throws Exception {
-        mockMvc.perform(delete("/api/inventory/spare-parts/{id}", SPARE_PART_ID))
+        mockMvc.perform(delete("/api/inventory/spare-parts/{id}", SPARE_PART_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/inventory/spare-parts/{id}", SPARE_PART_ID))
+        mockMvc.perform(get("/api/inventory/spare-parts/{id}", SPARE_PART_ID).with(asWarehouseAdmin()))
                 .andExpect(status().isNotFound());
     }
 }

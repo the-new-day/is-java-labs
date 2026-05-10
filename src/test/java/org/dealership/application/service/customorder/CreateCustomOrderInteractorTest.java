@@ -4,15 +4,14 @@ import org.dealership.application.mapper.ConfigurationMapper;
 import org.dealership.application.port.in.customorder.CreateCustomOrderUseCase;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.port.out.persistence.CustomCarOrderRepository;
-import org.dealership.application.port.out.persistence.UserRepository;
+import org.dealership.application.port.out.security.ManagerProvider;
 import org.dealership.application.service.ServiceTestData;
 import org.dealership.domain.model.car.Brand;
 import org.dealership.domain.model.car.CarModel;
 import org.dealership.domain.model.id.CarModelId;
 import org.dealership.domain.model.id.OrderId;
+import org.dealership.domain.model.id.UserId;
 import org.dealership.domain.model.user.UserSelectionStrategy;
-import org.dealership.domain.model.user.User;
-import org.dealership.domain.model.user.UserRole;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
@@ -34,7 +32,7 @@ class CreateCustomOrderInteractorTest {
     @Mock
     private CarModelRepository carModelRepository;
     @Mock
-    private UserRepository userRepository;
+    private ManagerProvider managerProvider;
     @Mock
     private UserSelectionStrategy userSelectionStrategy;
     @Mock
@@ -45,20 +43,19 @@ class CreateCustomOrderInteractorTest {
         UUID modelIdValue = UUID.randomUUID();
         Brand brand = ServiceTestData.brand(UUID.randomUUID());
         CarModel model = ServiceTestData.carModel(modelIdValue, brand);
-        User manager = ServiceTestData.user(UUID.randomUUID(), UserRole.MANAGER);
+        UserId managerId = new UserId(UUID.randomUUID());
 
         when(carModelRepository.findById(new CarModelId(modelIdValue))).thenReturn(Optional.of(model));
         when(customOrderRepository.nextId()).thenReturn(new OrderId(UUID.randomUUID()));
-        when(userRepository.findByRole(UserRole.MANAGER)).thenReturn(List.of(manager));
-        when(userSelectionStrategy.selectUser(Stream.of(manager).map(User::getId).toList()))
-                .thenReturn(manager.getId());
+        when(managerProvider.listManagerIds()).thenReturn(List.of(managerId));
+        when(userSelectionStrategy.selectUser(List.of(managerId))).thenReturn(managerId);
         when(configurationMapper.toDomain(org.mockito.ArgumentMatchers.any()))
                 .thenReturn(ServiceTestData.configuration(model));
 
         CreateCustomOrderInteractor interactor = new CreateCustomOrderInteractor(
                 customOrderRepository,
                 carModelRepository,
-                userRepository,
+                managerProvider,
                 userSelectionStrategy,
                 configurationMapper
         );

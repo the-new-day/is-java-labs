@@ -1,7 +1,6 @@
 package org.dealership.infrastructure.config;
 
 import org.dealership.application.mapper.UserMapper;
-import org.dealership.application.mapper.UserRoleMapper;
 import org.dealership.application.port.in.user.CreateUserUseCase;
 import org.dealership.application.port.in.user.DeleteUserUseCase;
 import org.dealership.application.port.in.user.GetUserUseCase;
@@ -27,8 +26,8 @@ public class UserUseCaseConfig {
     }
 
     @Bean
-    public CreateUserUseCase createUserUseCase(UserRepository userRepository, UserRoleMapper userRoleMapper) {
-        return new CreateUserInteractor(userRepository, userRoleMapper);
+    public CreateUserUseCase createUserUseCase(UserRepository userRepository) {
+        return new CreateUserInteractor(userRepository);
     }
 
     @Bean

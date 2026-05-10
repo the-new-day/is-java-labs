@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserJpaMapper {
     public User toDomain(UserJpaEntity entity) {
-        return new User(new UserId(entity.getId()), entity.getFullName(), entity.getRole());
+        return new User(new UserId(entity.getId()), entity.getFullName());
     }
 
     public UserJpaEntity toEntity(User user) {
-        return new UserJpaEntity(user.getId().value(), user.getFullName(), user.getRole());
+        return new UserJpaEntity(user.getId().value(), user.getFullName());
     }
 }

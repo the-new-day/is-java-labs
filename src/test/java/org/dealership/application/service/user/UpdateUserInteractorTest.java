@@ -34,7 +34,7 @@ class UpdateUserInteractorTest {
 
         UpdateUserInteractor interactor = new UpdateUserInteractor(userRepository, userMapper);
         var response = interactor.execute(new UpdateUserUseCase.Request(
-                ServiceTestData.userDto(userIdValue, "User", "CLIENT")
+                ServiceTestData.userDto(userIdValue, "User")
         ));
 
         assertNotNull(response);

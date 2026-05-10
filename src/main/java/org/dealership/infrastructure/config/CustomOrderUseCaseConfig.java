@@ -8,7 +8,7 @@ import org.dealership.application.port.in.customorder.ListCustomOrdersUseCase;
 import org.dealership.application.port.in.customorder.UpdateCustomOrderUseCase;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.port.out.persistence.CustomCarOrderRepository;
-import org.dealership.application.port.out.persistence.UserRepository;
+import org.dealership.application.port.out.security.ManagerProvider;
 import org.dealership.application.service.customorder.CreateCustomOrderInteractor;
 import org.dealership.application.service.customorder.DeleteCustomOrderInteractor;
 import org.dealership.application.service.customorder.GetCustomOrderInteractor;
@@ -25,14 +25,14 @@ public class CustomOrderUseCaseConfig {
     public CreateCustomOrderUseCase createCustomOrderUseCase(
             CustomCarOrderRepository customCarOrderRepository,
             CarModelRepository carModelRepository,
-            UserRepository userRepository,
+            ManagerProvider managerProvider,
             UserSelectionStrategy userSelectionStrategy,
             ConfigurationMapper configurationMapper
     ) {
         return new CreateCustomOrderInteractor(
                 customCarOrderRepository,
                 carModelRepository,
-                userRepository,
+                managerProvider,
                 userSelectionStrategy,
                 configurationMapper);
     }
