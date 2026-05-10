@@ -1,13 +1,14 @@
 package org.dealership.rest;
 
 import org.dealership.AbstractIntegrationTest;
+import org.dealership.TestUserManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.hamcrest.Matchers;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,13 +21,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
 class UserControllerIT extends AbstractIntegrationTest {
 
     private static final UUID CLIENT_ID = SEED_CLIENT_ID;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private TestUserManager userIdentityProvider;
+
+    @BeforeEach
+    void resetUserStore() {
+        userIdentityProvider.reset();
+    }
 
     @Test
     void getUser_admin_returns200WithUserDetails() throws Exception {

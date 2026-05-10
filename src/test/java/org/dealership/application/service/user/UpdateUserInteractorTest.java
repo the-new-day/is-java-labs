@@ -1,43 +1,34 @@
 package org.dealership.application.service.user;
 
-import org.dealership.application.mapper.UserMapper;
 import org.dealership.application.port.in.user.UpdateUserUseCase;
-import org.dealership.application.port.out.persistence.UserRepository;
+import org.dealership.application.port.out.security.UserManager;
 import org.dealership.application.service.ServiceTestData;
 import org.dealership.domain.model.id.UserId;
-import org.dealership.domain.model.user.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateUserInteractorTest {
     @Mock
-    private UserRepository userRepository;
-    @Mock
-    private UserMapper userMapper;
+    private UserManager userManager;
 
     @Test
     void shouldUpdateUser() {
-        UUID userIdValue = UUID.randomUUID();
-        User existing = ServiceTestData.user(userIdValue);
-        when(userRepository.findById(new UserId(userIdValue))).thenReturn(Optional.of(existing));
-        when(userMapper.toDomain(org.mockito.ArgumentMatchers.any())).thenReturn(existing);
+        UUID id = UUID.randomUUID();
 
-        UpdateUserInteractor interactor = new UpdateUserInteractor(userRepository, userMapper);
+        UpdateUserInteractor interactor = new UpdateUserInteractor(userManager);
         var response = interactor.execute(new UpdateUserUseCase.Request(
-                ServiceTestData.userDto(userIdValue, "User")
+                ServiceTestData.userDto(id, "Updated Name")
         ));
 
         assertNotNull(response);
-        verify(userRepository).save(org.mockito.Mockito.any(User.class));
+        verify(userManager).updateUser(new UserId(id), "Updated Name");
     }
 }

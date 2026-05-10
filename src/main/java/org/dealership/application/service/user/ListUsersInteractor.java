@@ -1,24 +1,24 @@
 package org.dealership.application.service.user;
 
-import org.dealership.application.mapper.UserMapper;
 import org.dealership.application.port.in.user.ListUsersUseCase;
-import org.dealership.application.port.out.persistence.UserRepository;
+import org.dealership.application.port.in.user.dto.UserDto;
+import org.dealership.application.port.out.security.UserManager;
+
+import java.util.List;
 
 public class ListUsersInteractor implements ListUsersUseCase {
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
-    public ListUsersInteractor(UserRepository userRepository, UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
+    private final UserManager userManager;
+
+    public ListUsersInteractor(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     @Override
     public Response execute(Request request) {
-        return new Response(
-                userRepository.findAll().stream()
-                        .map(userMapper::toDto)
-                        .toList()
-        );
+        List<UserDto> users = userManager.listUsers().stream()
+                .map(r -> new UserDto(r.id(), r.fullName()))
+                .toList();
+        return new Response(users);
     }
 }

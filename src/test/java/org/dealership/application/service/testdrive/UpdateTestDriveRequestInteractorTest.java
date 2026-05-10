@@ -2,6 +2,7 @@ package org.dealership.application.service.testdrive;
 
 import org.dealership.application.mapper.TestDriveRequestMapper;
 import org.dealership.application.port.in.testdrive.UpdateTestDriveRequestUseCase;
+import org.dealership.application.port.in.testdrive.dto.NewTestDriveRequestDto;
 import org.dealership.application.port.out.persistence.TestDriveRequestRepository;
 import org.dealership.application.service.ServiceTestData;
 import org.dealership.domain.model.id.TestDriveRequestId;
@@ -30,7 +31,7 @@ class UpdateTestDriveRequestInteractorTest {
     void shouldUpdateTestDriveRequest() {
         UUID requestIdValue = UUID.randomUUID();
         UUID carIdValue = UUID.randomUUID();
-        TestDriveRequest request = ServiceTestData.testDriveRequest(
+        TestDriveRequest existing = ServiceTestData.testDriveRequest(
                 requestIdValue,
                 UUID.randomUUID(),
                 carIdValue,
@@ -38,14 +39,13 @@ class UpdateTestDriveRequestInteractorTest {
         );
 
         when(testDriveRequestRepository.findById(new TestDriveRequestId(requestIdValue)))
-                .thenReturn(Optional.of(request));
+                .thenReturn(Optional.of(existing));
 
         UpdateTestDriveRequestInteractor interactor = new UpdateTestDriveRequestInteractor(
                 testDriveRequestRepository, testDriveRequestMapper);
         var response = interactor.execute(new UpdateTestDriveRequestUseCase.Request(
-                ServiceTestData.testDriveRequestDto(
-                        requestIdValue, UUID.randomUUID(), carIdValue, LocalDateTime.now()
-                )
+                requestIdValue,
+                new NewTestDriveRequestDto(UUID.randomUUID(), carIdValue, LocalDateTime.now())
         ));
 
         assertNotNull(response);

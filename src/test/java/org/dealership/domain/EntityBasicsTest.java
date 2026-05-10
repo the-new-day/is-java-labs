@@ -6,7 +6,6 @@ import org.dealership.domain.model.enums.ComponentType;
 import org.dealership.domain.model.id.*;
 import org.dealership.domain.model.part.SparePart;
 import org.dealership.domain.model.testdrive.TestDriveRequest;
-import org.dealership.domain.model.user.User;
 import org.dealership.domain.model.vo.Money;
 import org.junit.jupiter.api.Test;
 
@@ -19,16 +18,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EntityBasicsTest {
     @Test
-    void shouldExposeBrandAndUserData() {
+    void shouldExposeBrandData() {
         BrandId brandId = new BrandId(UUID.randomUUID());
         Brand brand = new Brand(brandId, "BMW");
         assertEquals(brandId, brand.getId());
         assertEquals("BMW", brand.getName());
 
-        UserId userId = new UserId(UUID.randomUUID());
-        User user = new User(userId, "Alice");
-        assertEquals(userId, user.getId());
-        assertEquals("Alice", user.getFullName());
     }
 
     @Test

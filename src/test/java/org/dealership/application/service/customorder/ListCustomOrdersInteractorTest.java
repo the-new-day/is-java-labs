@@ -1,5 +1,6 @@
 package org.dealership.application.service.customorder;
 
+import org.dealership.application.mapper.CustomOrderMapper;
 import org.dealership.application.port.in.customorder.ListCustomOrdersUseCase;
 import org.dealership.application.port.out.persistence.CustomCarOrderRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -21,21 +22,27 @@ import static org.mockito.Mockito.when;
 class ListCustomOrdersInteractorTest {
     @Mock
     private CustomCarOrderRepository customOrderRepository;
+    @Mock
+    private CustomOrderMapper customOrderMapper;
 
     @Test
     void shouldListCustomOrders() {
+        UUID orderIdValue = UUID.randomUUID();
+        UUID modelIdValue = UUID.randomUUID();
         Brand brand = ServiceTestData.brand(UUID.randomUUID());
-        CarModel model = ServiceTestData.carModel(UUID.randomUUID(), brand);
+        CarModel model = ServiceTestData.carModel(modelIdValue, brand);
         CustomCarOrder order = ServiceTestData.customOrder(
-                UUID.randomUUID(),
+                orderIdValue,
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 model
         );
+        var dto = ServiceTestData.customOrderDto(orderIdValue, UUID.randomUUID(), UUID.randomUUID(), modelIdValue, "PLACED");
 
         when(customOrderRepository.findAll()).thenReturn(List.of(order));
+        when(customOrderMapper.toDto(order)).thenReturn(dto);
 
-        ListCustomOrdersInteractor interactor = new ListCustomOrdersInteractor(customOrderRepository);
+        ListCustomOrdersInteractor interactor = new ListCustomOrdersInteractor(customOrderRepository, customOrderMapper);
         var response = interactor.execute(new ListCustomOrdersUseCase.Request());
 
         assertEquals(1, response.order().size());

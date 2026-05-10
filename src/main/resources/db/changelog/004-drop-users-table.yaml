@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-drop-users-table
+      author: the-new-day
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: stock_car_orders
+            constraintName: fk_stock_orders_client
+        - dropForeignKeyConstraint:
+            baseTableName: stock_car_orders
+            constraintName: fk_stock_orders_manager
+        - dropForeignKeyConstraint:
+            baseTableName: custom_car_orders
+            constraintName: fk_custom_orders_client
+        - dropForeignKeyConstraint:
+            baseTableName: custom_car_orders
+            constraintName: fk_custom_orders_manager
+        - dropForeignKeyConstraint:
+            baseTableName: test_drive_requests
+            constraintName: fk_test_drive_requests_client
+        - dropTable:
+            tableName: users

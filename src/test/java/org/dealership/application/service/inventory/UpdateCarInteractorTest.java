@@ -50,9 +50,7 @@ class UpdateCarInteractorTest {
 
         UpdateCarInteractor interactor = new UpdateCarInteractor(carRepository, carModelRepository, configurationMapper, colorMapper);
         var response = interactor.execute(
-                new UpdateCarUseCase.Request(
-                        ServiceTestData.carDetailsDto(carIdValue, modelIdValue, false)
-                )
+                new UpdateCarUseCase.Request(carIdValue, ServiceTestData.newCarDetailsDto(modelIdValue))
         );
 
         assertNotNull(response);

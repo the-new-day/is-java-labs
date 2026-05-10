@@ -26,7 +26,6 @@ import org.dealership.domain.model.order.state.CustomCarOrderStatus;
 import org.dealership.domain.model.order.state.StockCarOrderStatus;
 import org.dealership.domain.model.part.SparePart;
 import org.dealership.domain.model.testdrive.TestDriveRequest;
-import org.dealership.domain.model.user.User;
 import org.dealership.domain.model.vo.Money;
 import org.dealership.domain.model.vo.VinNumber;
 
@@ -150,10 +149,10 @@ public final class ServiceTestData {
             UUID orderId,
             UUID clientId,
             UUID managerId,
-            UUID carId,
+            UUID modelId,
             String status
     ) {
-        return new CustomOrderDto(orderId, clientId, managerId, carId, new CustomOrderStatusDto(status));
+        return new CustomOrderDto(orderId, clientId, managerId, configurationDto(modelId), new CustomOrderStatusDto(status));
     }
 
     public static TestDriveRequestDto testDriveRequestDto(
@@ -240,7 +239,4 @@ public final class ServiceTestData {
         );
     }
 
-    public static User user(UUID userId) {
-        return new User(new UserId(userId), "Full Name");
-    }
 }

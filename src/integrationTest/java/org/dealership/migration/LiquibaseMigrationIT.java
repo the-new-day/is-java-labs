@@ -34,8 +34,7 @@ class LiquibaseMigrationIT extends AbstractIntegrationTest {
                 "spare_part_compatible_models",
                 "spare_parts",
                 "stock_car_orders",
-                "test_drive_requests",
-                "users"
+                "test_drive_requests"
         );
     }
 
@@ -68,15 +67,6 @@ class LiquibaseMigrationIT extends AbstractIntegrationTest {
                 Integer.class
         );
         assertThat(count).isEqualTo(3);
-    }
-
-    @Test
-    void seedDataUsersArePresent() {
-        Integer count = jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM users WHERE removed = false",
-                Integer.class
-        );
-        assertThat(count).isEqualTo(4);
     }
 
     @Test

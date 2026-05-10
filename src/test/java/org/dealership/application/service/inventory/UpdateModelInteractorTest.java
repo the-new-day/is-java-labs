@@ -35,7 +35,7 @@ class UpdateModelInteractorTest {
         when(carModelRepository.findById(new CarModelId(modelIdValue))).thenReturn(Optional.of(model));
 
         UpdateModelInteractor interactor = new UpdateModelInteractor(carModelRepository, carModelMapper);
-        var response = interactor.execute(new UpdateModelUseCase.Request(ServiceTestData.carModelDto(modelIdValue)));
+        var response = interactor.execute(new UpdateModelUseCase.Request(modelIdValue, ServiceTestData.newModelDto(brand.getId().value())));
 
         assertNotNull(response);
         verify(carModelRepository).save(org.mockito.Mockito.any());

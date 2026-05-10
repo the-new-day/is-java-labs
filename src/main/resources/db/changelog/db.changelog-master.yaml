@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/002-seed-data.yaml
   - include:
       file: db/changelog/003-drop-user-role-column.yaml
+  - include:
+      file: db/changelog/004-drop-users-table.yaml

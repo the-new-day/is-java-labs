@@ -1,6 +1,7 @@
 package org.dealership.application.service.testdrive;
 
 import org.dealership.application.port.in.testdrive.CreateTestDriveRequestUseCase;
+import org.dealership.application.port.in.testdrive.dto.NewTestDriveRequestDto;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.application.port.out.persistence.TestDriveRequestRepository;
 import org.dealership.application.service.ServiceTestData;
@@ -42,9 +43,7 @@ class CreateTestDriveRequestInteractorTest {
         CreateTestDriveRequestInteractor interactor
                 = new CreateTestDriveRequestInteractor(testDriveRequestRepository, carRepository);
         var response = interactor.execute(new CreateTestDriveRequestUseCase.Request(
-                UUID.randomUUID(),
-                carIdValue,
-                LocalDateTime.now()
+                new NewTestDriveRequestDto(UUID.randomUUID(), carIdValue, LocalDateTime.now())
         ));
 
         assertNotNull(response.id());

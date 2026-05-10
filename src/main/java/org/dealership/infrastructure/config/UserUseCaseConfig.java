@@ -1,13 +1,11 @@
 package org.dealership.infrastructure.config;
 
-import org.dealership.application.mapper.UserMapper;
 import org.dealership.application.port.in.user.CreateUserUseCase;
 import org.dealership.application.port.in.user.DeleteUserUseCase;
 import org.dealership.application.port.in.user.GetUserUseCase;
 import org.dealership.application.port.in.user.ListUsersUseCase;
 import org.dealership.application.port.in.user.UpdateUserUseCase;
-import org.dealership.application.port.out.persistence.UserRepository;
-import org.dealership.application.port.out.security.UserIdentityProvider;
+import org.dealership.application.port.out.security.UserManager;
 import org.dealership.application.service.user.CreateUserInteractor;
 import org.dealership.application.service.user.DeleteUserInteractor;
 import org.dealership.application.service.user.GetUserInteractor;
@@ -27,27 +25,27 @@ public class UserUseCaseConfig {
     }
 
     @Bean
-    public CreateUserUseCase createUserUseCase(UserRepository userRepository, UserIdentityProvider userIdentityProvider) {
-        return new CreateUserInteractor(userRepository, userIdentityProvider);
+    public CreateUserUseCase createUserUseCase(UserManager userManager) {
+        return new CreateUserInteractor(userManager);
     }
 
     @Bean
-    public DeleteUserUseCase deleteUserUseCase(UserRepository userRepository) {
-        return new DeleteUserInteractor(userRepository);
+    public DeleteUserUseCase deleteUserUseCase(UserManager userManager) {
+        return new DeleteUserInteractor(userManager);
     }
 
     @Bean
-    public GetUserUseCase getUserUseCase(UserRepository userRepository, UserMapper userMapper) {
-        return new GetUserInteractor(userRepository, userMapper);
+    public GetUserUseCase getUserUseCase(UserManager userManager) {
+        return new GetUserInteractor(userManager);
     }
 
     @Bean
-    public ListUsersUseCase listUsersUseCase(UserRepository userRepository, UserMapper userMapper) {
-        return new ListUsersInteractor(userRepository, userMapper);
+    public ListUsersUseCase listUsersUseCase(UserManager userManager) {
+        return new ListUsersInteractor(userManager);
     }
 
     @Bean
-    public UpdateUserUseCase updateUserUseCase(UserRepository userRepository, UserMapper userMapper) {
-        return new UpdateUserInteractor(userRepository, userMapper);
+    public UpdateUserUseCase updateUserUseCase(UserManager userManager) {
+        return new UpdateUserInteractor(userManager);
     }
 }
