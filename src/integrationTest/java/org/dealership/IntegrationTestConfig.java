@@ -22,13 +22,13 @@ public class IntegrationTestConfig {
 
     @Bean
     @Primary
-    public ManagerProvider testManagerDirectory() {
+    public ManagerProvider testManagers() {
         return () -> List.of(new UserId(SEED_MANAGER_ID));
     }
 
     @Bean
     @Primary
-    public TestUserManager testUserIdentityProvider() {
+    public TestUserManager testUserManager() {
         return new TestUserManager(Map.of(
                 SEED_CLIENT_ID, "Ivan Petrov",
                 SEED_MANAGER_ID, "Maria Manager",
