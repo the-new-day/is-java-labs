@@ -69,10 +69,9 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     void createUser_admin_returns201() throws Exception {
-        UUID newId = UUID.randomUUID();
-        String requestBody = String.format("""
-                {"id": "%s", "fullName": "New Test User"}
-                """, newId);
+        String requestBody = """
+                {"username": "newuser", "password": "secret123", "fullName": "New Test User"}
+                """;
 
         MvcResult result = mockMvc.perform(post("/api/users")
                         .with(asAdmin())
@@ -80,7 +79,7 @@ class UserControllerIT extends AbstractIntegrationTest {
                         .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", Matchers.startsWith("/api/users/")))
-                .andExpect(jsonPath("$.id").value(newId.toString()))
+                .andExpect(jsonPath("$.id").exists())
                 .andReturn();
 
         String responseBody = result.getResponse().getContentAsString();
@@ -89,10 +88,9 @@ class UserControllerIT extends AbstractIntegrationTest {
 
     @Test
     void createUser_thenGetUser_returnsCreatedUser() throws Exception {
-        UUID newId = UUID.randomUUID();
-        String requestBody = String.format("""
-                {"id": "%s", "fullName": "Created User"}
-                """, newId);
+        String requestBody = """
+                {"username": "createduser", "password": "secret123", "fullName": "Created User"}
+                """;
 
         MvcResult createResult = mockMvc.perform(post("/api/users")
                         .with(asAdmin())

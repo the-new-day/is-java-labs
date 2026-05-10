@@ -42,7 +42,7 @@ public class CreateCustomOrderInteractor implements CreateCustomOrderUseCase {
         ConfigurationDto configurationDto = request.configuration();
         CarModelId modelId = new CarModelId(configurationDto.carModel().id());
         carModelRepository.findById(modelId)
-                .orElseThrow(() -> new EntityNotFoundException("Car model not found: " + modelId));
+                .orElseThrow(() -> new EntityNotFoundException("Car newCarDetails not found: " + modelId));
         Configuration configuration = configurationMapper.toDomain(configurationDto);
 
         List<UserId> managers = managerProvider.listManagerIds();

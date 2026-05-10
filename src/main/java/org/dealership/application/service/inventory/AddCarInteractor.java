@@ -31,7 +31,7 @@ public class AddCarInteractor implements AddCarUseCase {
         NewCarDetailsDto dto = request.newCar();
         CarModelId modelId = new CarModelId(dto.configuration().carModel().id());
         CarModel model = carModelRepository.findById(modelId)
-                .orElseThrow(() -> new EntityNotFoundException("Car model not found: " + modelId));
+                .orElseThrow(() -> new EntityNotFoundException("Car newCarDetails not found: " + modelId));
         CarId carId = carRepository.nextId();
         Car car = carMapper.toDomain(dto, carId, model, false);
         carRepository.save(car);

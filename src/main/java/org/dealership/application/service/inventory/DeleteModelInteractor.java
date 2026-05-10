@@ -16,7 +16,7 @@ public class DeleteModelInteractor implements DeleteModelUseCase {
     public Response execute(Request request) {
         CarModelId modelId = new CarModelId(request.id());
         if (carModelRepository.findById(modelId).isEmpty()) {
-            throw new EntityNotFoundException("Car model not found: " + modelId);
+            throw new EntityNotFoundException("Car newCarDetails not found: " + modelId);
         }
         carModelRepository.deleteById(modelId);
         return new Response();

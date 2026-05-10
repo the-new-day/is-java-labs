@@ -1,11 +1,13 @@
 package org.dealership.application.port.in.stockorder;
 
-import org.dealership.application.port.in.stockorder.dto.StockOrderDto;
+import org.dealership.application.port.in.stockorder.dto.UpdateStockOrderDto;
+
+import java.util.UUID;
 
 public interface UpdateStockOrderUseCase {
     Response execute(Request request);
 
-    record Request(StockOrderDto order) {}
+    record Request(UUID orderId, UpdateStockOrderDto order) {}
 
     record Response() {}
 }

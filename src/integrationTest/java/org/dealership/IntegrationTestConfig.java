@@ -1,6 +1,7 @@
 package org.dealership;
 
 import org.dealership.application.port.out.security.ManagerProvider;
+import org.dealership.application.port.out.security.UserIdentityProvider;
 import org.dealership.domain.model.id.UserId;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,12 @@ public class IntegrationTestConfig {
     @Primary
     public ManagerProvider testManagerDirectory() {
         return () -> List.of(new UserId(SEED_MANAGER_ID));
+    }
+
+    @Bean
+    @Primary
+    public UserIdentityProvider testUserIdentityProvider() {
+        return (username, password, fullName) -> new UserId(UUID.randomUUID());
     }
 
     @Bean

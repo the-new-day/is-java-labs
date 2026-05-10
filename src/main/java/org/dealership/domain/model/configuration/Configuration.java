@@ -17,7 +17,7 @@ public class Configuration {
             CarModel model,
             ComponentVariantSelection componentVariantSelection
     ) {
-        this.model = DomainChecks.notNull(model, "model");
+        this.model = DomainChecks.notNull(model, "newCarDetails");
         this.componentVariantSelection = DomainChecks.notNull(
                 componentVariantSelection, "componentVariantSelection");
     }
@@ -41,15 +41,15 @@ public class Configuration {
 
         if (!model.getComponentTypes().contains(variant.getComponentType())) {
             throw new DomainValidationException(
-                    "Component type " + variant.getComponentType() + " is not supported by the model.");
+                    "Component type " + variant.getComponentType() + " is not supported by the newCarDetails.");
         }
         if (!model.isComponentConfigurable(variant.getComponentType())) {
             throw new DomainValidationException(
-                    "Component type " + variant.getComponentType() + " is fixed for the model.");
+                    "Component type " + variant.getComponentType() + " is fixed for the newCarDetails.");
         }
         if (!variant.isCompatibleWith(model.getId())) {
             throw new IncompatibleComponentException(
-                    "Component " + variant.getName() + " is incompatible with the model.");
+                    "Component " + variant.getName() + " is incompatible with the newCarDetails.");
         }
         ComponentVariantSelection newCarConfig
                 = componentVariantSelection.withVariant(variant.getComponentType(), variant);

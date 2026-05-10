@@ -5,10 +5,10 @@ import org.dealership.application.port.in.stockorder.dto.StockOrderDto;
 import java.util.List;
 import java.util.UUID;
 
-public interface ListStockOrdersUseCase {
+public interface ListClientStockOrdersUseCase {
     Response execute(Request request);
 
-    record Request() {}
+    record Request(UUID clientId) {}
 
     record Response(List<StockOrderDto> order) {}
 }

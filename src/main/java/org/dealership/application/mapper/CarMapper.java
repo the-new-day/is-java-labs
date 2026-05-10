@@ -44,7 +44,7 @@ public abstract class CarMapper {
                 vinNumberMapper.toDomain(dto.vinNumber()),
                 new Configuration(model,
                         configurationMapper.toDomain(dto.configuration()).getComponentVariantSelection()),
-                colorMapper.toDomain(dto.colorDto()),
+                colorMapper.toDomain(dto.color()),
                 testDriveAvailable
         );
     }

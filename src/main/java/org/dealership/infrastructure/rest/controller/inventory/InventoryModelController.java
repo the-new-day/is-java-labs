@@ -21,7 +21,8 @@ public class InventoryModelController {
     public InventoryModelController(
             AddModelUseCase addModelUseCase,
             UpdateModelUseCase updateModelUseCase,
-            DeleteModelUseCase deleteModelUseCase) {
+            DeleteModelUseCase deleteModelUseCase
+    ) {
         this.addModelUseCase = addModelUseCase;
         this.updateModelUseCase = updateModelUseCase;
         this.deleteModelUseCase = deleteModelUseCase;
@@ -34,8 +35,8 @@ public class InventoryModelController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateModel(@PathVariable UUID id, @RequestBody CarModelDto model) {
-        updateModelUseCase.execute(new UpdateModelUseCase.Request(model));
+    public ResponseEntity<Void> updateModel(@PathVariable UUID id, @RequestBody NewModelDto model) {
+        updateModelUseCase.execute(new UpdateModelUseCase.Request(id, model));
         return ResponseEntity.ok().build();
     }
 

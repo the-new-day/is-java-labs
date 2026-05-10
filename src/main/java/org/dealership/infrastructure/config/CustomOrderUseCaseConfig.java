@@ -1,19 +1,14 @@
 package org.dealership.infrastructure.config;
 
+import org.dealership.application.mapper.BaseIdMapper;
 import org.dealership.application.mapper.ConfigurationMapper;
-import org.dealership.application.port.in.customorder.CreateCustomOrderUseCase;
-import org.dealership.application.port.in.customorder.DeleteCustomOrderUseCase;
-import org.dealership.application.port.in.customorder.GetCustomOrderUseCase;
-import org.dealership.application.port.in.customorder.ListCustomOrdersUseCase;
-import org.dealership.application.port.in.customorder.UpdateCustomOrderUseCase;
+import org.dealership.application.mapper.CustomOrderMapper;
+import org.dealership.application.mapper.CustomOrderStatusMapper;
+import org.dealership.application.port.in.customorder.*;
 import org.dealership.application.port.out.persistence.CarModelRepository;
 import org.dealership.application.port.out.persistence.CustomCarOrderRepository;
 import org.dealership.application.port.out.security.ManagerProvider;
-import org.dealership.application.service.customorder.CreateCustomOrderInteractor;
-import org.dealership.application.service.customorder.DeleteCustomOrderInteractor;
-import org.dealership.application.service.customorder.GetCustomOrderInteractor;
-import org.dealership.application.service.customorder.ListCustomOrdersInteractor;
-import org.dealership.application.service.customorder.UpdateCustomOrderInteractor;
+import org.dealership.application.service.customorder.*;
 import org.dealership.domain.model.user.UserSelectionStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,17 +38,37 @@ public class CustomOrderUseCaseConfig {
     }
 
     @Bean
-    public GetCustomOrderUseCase getCustomOrderUseCase(CustomCarOrderRepository customCarOrderRepository) {
-        return new GetCustomOrderInteractor(customCarOrderRepository);
+    public GetCustomOrderUseCase getCustomOrderUseCase(
+            CustomCarOrderRepository customCarOrderRepository,
+            CustomOrderMapper customOrderMapper
+    ) {
+        return new GetCustomOrderInteractor(customCarOrderRepository, customOrderMapper);
     }
 
     @Bean
-    public ListCustomOrdersUseCase listCustomOrdersUseCase(CustomCarOrderRepository customCarOrderRepository) {
-        return new ListCustomOrdersInteractor(customCarOrderRepository);
+    public ListCustomOrdersUseCase listCustomOrdersUseCase(
+            CustomCarOrderRepository customCarOrderRepository,
+            CustomOrderMapper customOrderMapper
+    ) {
+        return new ListCustomOrdersInteractor(customCarOrderRepository, customOrderMapper);
     }
 
     @Bean
-    public UpdateCustomOrderUseCase updateCustomOrderUseCase(CustomCarOrderRepository customCarOrderRepository) {
-        return new UpdateCustomOrderInteractor(customCarOrderRepository);
+    public ListClientCustomOrdersUseCase listClientCustomOrdersUseCase(
+            CustomCarOrderRepository customCarOrderRepository,
+            BaseIdMapper idMapper,
+            CustomOrderMapper customOrderMapper
+    ) {
+        return new ListClientCustomOrdersInteractor(
+                customCarOrderRepository, idMapper, customOrderMapper
+        );
+    }
+
+    @Bean
+    public UpdateCustomOrderUseCase updateCustomOrderUseCase(
+            CustomCarOrderRepository customCarOrderRepository,
+            CustomOrderStatusMapper statusMapper
+    ) {
+        return new UpdateCustomOrderInteractor(customCarOrderRepository, statusMapper);
     }
 }

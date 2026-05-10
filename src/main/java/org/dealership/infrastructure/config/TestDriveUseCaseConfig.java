@@ -1,20 +1,11 @@
 package org.dealership.infrastructure.config;
 
+import org.dealership.application.mapper.BaseIdMapper;
 import org.dealership.application.mapper.TestDriveRequestMapper;
-import org.dealership.application.port.in.testdrive.CreateTestDriveRequestUseCase;
-import org.dealership.application.port.in.testdrive.DeleteTestDriveRequestUseCase;
-import org.dealership.application.port.in.testdrive.GetTestDriveRequestUseCase;
-import org.dealership.application.port.in.testdrive.ListTestDriveRequestsUseCase;
-import org.dealership.application.port.in.testdrive.SetTestDriveAvailableUseCase;
-import org.dealership.application.port.in.testdrive.UpdateTestDriveRequestUseCase;
+import org.dealership.application.port.in.testdrive.*;
 import org.dealership.application.port.out.persistence.CarRepository;
 import org.dealership.application.port.out.persistence.TestDriveRequestRepository;
-import org.dealership.application.service.testdrive.CreateTestDriveRequestInteractor;
-import org.dealership.application.service.testdrive.DeleteTestDriveRequestInteractor;
-import org.dealership.application.service.testdrive.GetTestDriveRequestInteractor;
-import org.dealership.application.service.testdrive.ListTestDriveRequestsInteractor;
-import org.dealership.application.service.testdrive.SetTestDriveAvailableInteractor;
-import org.dealership.application.service.testdrive.UpdateTestDriveRequestInteractor;
+import org.dealership.application.service.testdrive.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -50,6 +41,16 @@ public class TestDriveUseCaseConfig {
             TestDriveRequestMapper testDriveRequestMapper
     ) {
         return new ListTestDriveRequestsInteractor(testDriveRequestRepository, testDriveRequestMapper);
+    }
+
+    @Bean
+    public ListClientTestDriveRequestsUseCase listClientTestDriveRequestsUseCase(
+            TestDriveRequestRepository testDriveRequestRepository,
+            TestDriveRequestMapper testDriveRequestMapper,
+            BaseIdMapper idMapper
+    ) {
+        return new ListClientTestDriveRequestsInteractor(
+                testDriveRequestRepository, testDriveRequestMapper, idMapper);
     }
 
     @Bean

@@ -25,7 +25,8 @@ public class InventoryCarController {
             GetInventoryCarUseCase getInventoryCarUseCase,
             ListInventoryCarsUseCase listInventoryCarsUseCase,
             UpdateCarUseCase updateCarUseCase,
-            DeleteCarUseCase deleteCarUseCase) {
+            DeleteCarUseCase deleteCarUseCase
+    ) {
         this.addCarUseCase = addCarUseCase;
         this.getInventoryCarUseCase = getInventoryCarUseCase;
         this.listInventoryCarsUseCase = listInventoryCarsUseCase;
@@ -50,8 +51,8 @@ public class InventoryCarController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCar(@PathVariable UUID id, @RequestBody CarDetailsDto car) {
-        updateCarUseCase.execute(new UpdateCarUseCase.Request(car));
+    public ResponseEntity<Void> updateCar(@PathVariable UUID id, @RequestBody NewCarDetailsDto car) {
+        updateCarUseCase.execute(new UpdateCarUseCase.Request(id, car));
         return ResponseEntity.ok().build();
     }
 

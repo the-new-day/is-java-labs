@@ -20,7 +20,7 @@ public class AddSparePartInteractor implements AddSparePartUseCase {
     public Response execute(Request request) {
         NewSparePartDto dto = request.newSparePart();
         SparePartId partId = sparePartRepository.nextId();
-        SparePart part = sparePartMapper.toDomain(dto, partId);
+        SparePart part = sparePartMapper.toDomain(partId, dto);
         sparePartRepository.save(part);
         return new Response(partId.value());
     }

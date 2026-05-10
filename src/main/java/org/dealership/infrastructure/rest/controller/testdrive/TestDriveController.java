@@ -1,11 +1,13 @@
 package org.dealership.infrastructure.rest.controller.testdrive;
 
 import org.dealership.application.port.in.testdrive.*;
+import org.dealership.application.port.in.testdrive.dto.NewTestDriveRequestDto;
 import org.dealership.application.port.in.testdrive.dto.TestDriveRequestDto;
 import org.dealership.application.port.out.security.CurrentUserProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -21,6 +23,7 @@ public class TestDriveController {
     private final UpdateTestDriveRequestUseCase updateTestDriveRequestUseCase;
     private final DeleteTestDriveRequestUseCase deleteTestDriveRequestUseCase;
     private final SetTestDriveAvailableUseCase setTestDriveAvailableUseCase;
+    private final ListClientTestDriveRequestsUseCase listClientTestDriveRequestsUseCase;
     private final CurrentUserProvider currentUserProvider;
 
     public TestDriveController(
@@ -30,6 +33,7 @@ public class TestDriveController {
             UpdateTestDriveRequestUseCase updateTestDriveRequestUseCase,
             DeleteTestDriveRequestUseCase deleteTestDriveRequestUseCase,
             SetTestDriveAvailableUseCase setTestDriveAvailableUseCase,
+            ListClientTestDriveRequestsUseCase listClientTestDriveRequestsUseCase,
             CurrentUserProvider currentUserProvider
     ) {
         this.createTestDriveRequestUseCase = createTestDriveRequestUseCase;
@@ -38,6 +42,7 @@ public class TestDriveController {
         this.updateTestDriveRequestUseCase = updateTestDriveRequestUseCase;
         this.deleteTestDriveRequestUseCase = deleteTestDriveRequestUseCase;
         this.setTestDriveAvailableUseCase = setTestDriveAvailableUseCase;
+        this.listClientTestDriveRequestsUseCase = listClientTestDriveRequestsUseCase;
         this.currentUserProvider = currentUserProvider;
     }
 
@@ -49,8 +54,9 @@ public class TestDriveController {
             @RequestBody CreateTestDriveBody body
     ) {
         UUID clientId = currentUserProvider.currentUserId().value();
+        var dto = new NewTestDriveRequestDto(clientId, body.carId, body.startsAt);
         CreateTestDriveRequestUseCase.Response response = createTestDriveRequestUseCase.execute(
-                new CreateTestDriveRequestUseCase.Request(clientId, body.carId(), body.startsAt())
+                new CreateTestDriveRequestUseCase.Request(dto)
         );
         return ResponseEntity.created(URI.create("/api/test-drives/" + response.id())).body(response);
     }
@@ -62,11 +68,19 @@ public class TestDriveController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<ListTestDriveRequestsUseCase.Response> listTestDriveRequests() {
-        UUID clientFilter = isManagerOrAdmin() ? null : currentUserProvider.currentUserId().value();
         return ResponseEntity.ok(
-                listTestDriveRequestsUseCase.execute(new ListTestDriveRequestsUseCase.Request(clientFilter))
+                listTestDriveRequestsUseCase.execute(new ListTestDriveRequestsUseCase.Request())
+        );
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ListClientTestDriveRequestsUseCase.Response> listMyTestDriveRequests() {
+        UUID clientId = currentUserProvider.currentUserId().value();
+        return ResponseEntity.ok(
+                listClientTestDriveRequestsUseCase.execute(new ListClientTestDriveRequestsUseCase.Request(clientId))
         );
     }
 
@@ -74,9 +88,9 @@ public class TestDriveController {
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<Void> updateTestDriveRequest(
             @PathVariable UUID id,
-            @RequestBody TestDriveRequestDto request
+            @RequestBody NewTestDriveRequestDto request
     ) {
-        updateTestDriveRequestUseCase.execute(new UpdateTestDriveRequestUseCase.Request(request));
+        updateTestDriveRequestUseCase.execute(new UpdateTestDriveRequestUseCase.Request(id, request));
         return ResponseEntity.ok().build();
     }
 
@@ -88,21 +102,12 @@ public class TestDriveController {
     }
 
     @PatchMapping("/cars/{carId}/availability")
-    @PreAuthorize("hasAnyRole('WAREHOUSE_ADMIN','ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<Void> setTestDriveAvailable(
             @PathVariable UUID carId,
             @RequestParam boolean available
     ) {
         setTestDriveAvailableUseCase.execute(new SetTestDriveAvailableUseCase.Request(carId, available));
         return ResponseEntity.ok().build();
-    }
-
-    private static boolean isManagerOrAdmin() {
-        return org.springframework.security.core.context.SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(a -> "ROLE_MANAGER".equals(a) || "ROLE_ADMIN".equals(a));
     }
 }

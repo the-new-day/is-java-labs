@@ -24,7 +24,7 @@ public class CreateTestDriveRequestInteractor implements CreateTestDriveRequestU
 
     @Override
     public Response execute(Request request) {
-        CarId carId = new CarId(request.carId());
+        CarId carId = new CarId(request.request().carId());
         Car car = carRepository.findById(carId)
                 .orElseThrow(() -> new EntityNotFoundException("Car not found: " + carId));
         if (!car.isTestDriveAvailable()) {
@@ -32,9 +32,9 @@ public class CreateTestDriveRequestInteractor implements CreateTestDriveRequestU
         }
         TestDriveRequest testDriveRequest = new TestDriveRequest(
                 testDriveRequestRepository.nextId(),
-                new UserId(request.clientId()),
+                new UserId(request.request().clientId()),
                 carId,
-                request.startsAt()
+                request.request().startsAt()
         );
         testDriveRequestRepository.save(testDriveRequest);
         return new Response(testDriveRequest.getId().value());

@@ -13,12 +13,8 @@ public interface StockOrderStatusMapper {
     StockOrderStatusDto toDto(StockCarOrderStatus status);
 
     default StockCarOrderStatus toDomain(StockOrderStatusDto dto) {
-        String name = dto.name() == null ? null : dto.name().toUpperCase();
-        if ("CONFIRMED".equals(name)) {
-            return StockCarOrderStatus.APPROVED_BY_MANAGER;
-        }
         try {
-            return StockCarOrderStatus.valueOf(name);
+            return StockCarOrderStatus.valueOf(dto.name().toUpperCase());
         } catch (IllegalArgumentException | NullPointerException e) {
             throw new DomainValidationException("Unsupported stock order status: " + dto.name());
         }

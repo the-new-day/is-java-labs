@@ -3,6 +3,7 @@ package org.dealership.application.service.stockorder;
 import org.dealership.application.mapper.StockOrderStatusMapper;
 import org.dealership.application.port.in.stockorder.UpdateStockOrderUseCase;
 import org.dealership.application.port.in.stockorder.dto.StockOrderDto;
+import org.dealership.application.port.in.stockorder.dto.UpdateStockOrderDto;
 import org.dealership.application.port.out.persistence.StockCarOrderRepository;
 import org.dealership.domain.exception.DomainValidationException;
 import org.dealership.domain.exception.EntityNotFoundException;
@@ -21,8 +22,8 @@ public class UpdateStockOrderInteractor implements UpdateStockOrderUseCase {
 
     @Override
     public Response execute(Request request) {
-        StockOrderDto dto = request.order();
-        OrderId orderId = new OrderId(dto.id());
+        UpdateStockOrderDto dto = request.order();
+        OrderId orderId = new OrderId(request.orderId());
         StockCarOrder order = stockOrderRepository.findById(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("Stock order not found: " + orderId));
         StockCarOrderStatus newStatus = stockOrderStatusMapper.toDomain(dto.status());

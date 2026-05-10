@@ -7,6 +7,6 @@ import org.dealership.application.port.in.common.dto.VinNumberDto;
 public record NewCarDetailsDto(
         VinNumberDto vinNumber,
         ConfigurationDto configuration,
-        ColorDto colorDto
+        ColorDto color
 ) {
 }

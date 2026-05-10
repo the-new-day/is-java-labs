@@ -110,9 +110,9 @@ class InventorySparePartControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    void deleteSparePart_warehouseAdminForbidden_returns403() throws Exception {
+    void deleteSparePart_warehouseAdmin_returns204() throws Exception {
         mockMvc.perform(delete("/api/inventory/spare-parts/{id}", SPARE_PART_ID).with(asWarehouseAdmin()))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isNoContent());
     }
 
     @Test

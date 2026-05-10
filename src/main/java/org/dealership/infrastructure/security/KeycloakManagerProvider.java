@@ -14,8 +14,6 @@ import java.util.UUID;
 @Component
 public class KeycloakManagerProvider implements ManagerProvider {
 
-    private static final int MAX_MANAGERS = 1000;
-
     private final KeycloakProperties properties;
     private final Keycloak keycloak;
 
@@ -35,7 +33,7 @@ public class KeycloakManagerProvider implements ManagerProvider {
         List<UserRepresentation> members = keycloak.realm(properties.getRealm())
                 .roles()
                 .get(properties.getManagerRealmRole())
-                .getUserMembers(0, MAX_MANAGERS);
+                .getUserMembers();
         return members.stream()
                 .map(UserRepresentation::getId)
                 .map(UUID::fromString)

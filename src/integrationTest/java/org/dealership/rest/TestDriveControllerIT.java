@@ -61,6 +61,28 @@ class TestDriveControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
+    void listMyTestDriveRequests_client_returns200WithOwnRequests() throws Exception {
+        mockMvc.perform(get("/api/test-drives/my").with(asClient()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.testDriveRequest").isArray())
+                .andExpect(jsonPath("$.testDriveRequest.length()").value(1));
+    }
+
+    @Test
+    void listMyTestDriveRequests_strangerClient_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/test-drives/my").with(jwtUser(UUID.randomUUID(), "USER")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.testDriveRequest").isArray())
+                .andExpect(jsonPath("$.testDriveRequest.length()").value(0));
+    }
+
+    @Test
+    void listMyTestDriveRequests_managerForbidden_returns403() throws Exception {
+        mockMvc.perform(get("/api/test-drives/my").with(asManager()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void createTestDriveRequest_clientCanCreate_returns201() throws Exception {
         String requestBody = String.format("""
                 {"carId": "%s", "startsAt": "2026-07-01T10:00:00"}
@@ -116,9 +138,9 @@ class TestDriveControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    void setTestDriveAvailable_warehouseAdmin_returns200() throws Exception {
+    void setTestDriveAvailable_manager_returns200() throws Exception {
         mockMvc.perform(patch("/api/test-drives/cars/{carId}/availability", CAR_ID)
-                        .with(asWarehouseAdmin())
+                        .with(asManager())
                         .param("available", "false"))
                 .andExpect(status().isOk());
 

@@ -27,7 +27,7 @@ public abstract class SparePartMapper {
     @Mapping(target = "compatibleModelIds", source = "compatibleModelIds", qualifiedByName = "toCarModelId")
     public abstract SparePart toDomain(SparePartSummaryDto dto);
 
-    public SparePart toDomain(NewSparePartDto dto, SparePartId id) {
+    public SparePart toDomain(SparePartId id, NewSparePartDto dto) {
         return new SparePart(
                 id,
                 dto.name(),

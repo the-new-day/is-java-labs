@@ -1,11 +1,13 @@
 package org.dealership.application.port.in.testdrive;
 
-import org.dealership.application.port.in.testdrive.dto.TestDriveRequestDto;
+import org.dealership.application.port.in.testdrive.dto.NewTestDriveRequestDto;
+
+import java.util.UUID;
 
 public interface UpdateTestDriveRequestUseCase {
     Response execute(Request request);
 
-    record Request(TestDriveRequestDto testDriveRequest) {}
+    record Request(UUID requestId, NewTestDriveRequestDto testDriveRequest) {}
 
     record Response() {}
 }

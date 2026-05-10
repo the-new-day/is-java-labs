@@ -1,11 +1,13 @@
 package org.dealership.application.port.in.inventory;
 
-import org.dealership.application.port.in.common.dto.CarDetailsDto;
+import org.dealership.application.port.in.inventory.dto.NewCarDetailsDto;
+
+import java.util.UUID;
 
 public interface UpdateCarUseCase {
     Response execute(Request request);
 
-    record Request(CarDetailsDto model) {}
+    record Request(UUID carId, NewCarDetailsDto newCarDetails) {}
 
     record Response() {}
 }

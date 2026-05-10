@@ -2,12 +2,10 @@ package org.dealership.infrastructure.rest.controller.customorder;
 
 import org.dealership.application.port.in.common.dto.ConfigurationDto;
 import org.dealership.application.port.in.customorder.*;
-import org.dealership.application.port.in.customorder.dto.CustomOrderDto;
+import org.dealership.application.port.in.customorder.dto.UpdateCustomOrderDto;
 import org.dealership.application.port.out.security.CurrentUserProvider;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -19,6 +17,7 @@ public class CustomOrderController {
     private final CreateCustomOrderUseCase createCustomOrderUseCase;
     private final GetCustomOrderUseCase getCustomOrderUseCase;
     private final ListCustomOrdersUseCase listCustomOrdersUseCase;
+    private final ListClientCustomOrdersUseCase listClientCustomOrdersUseCase;
     private final UpdateCustomOrderUseCase updateCustomOrderUseCase;
     private final DeleteCustomOrderUseCase deleteCustomOrderUseCase;
     private final CurrentUserProvider currentUserProvider;
@@ -27,12 +26,14 @@ public class CustomOrderController {
             CreateCustomOrderUseCase createCustomOrderUseCase,
             GetCustomOrderUseCase getCustomOrderUseCase,
             ListCustomOrdersUseCase listCustomOrdersUseCase,
+            ListClientCustomOrdersUseCase listClientCustomOrdersUseCase,
             UpdateCustomOrderUseCase updateCustomOrderUseCase,
             DeleteCustomOrderUseCase deleteCustomOrderUseCase,
             CurrentUserProvider currentUserProvider) {
         this.createCustomOrderUseCase = createCustomOrderUseCase;
         this.getCustomOrderUseCase = getCustomOrderUseCase;
         this.listCustomOrdersUseCase = listCustomOrdersUseCase;
+        this.listClientCustomOrdersUseCase = listClientCustomOrdersUseCase;
         this.updateCustomOrderUseCase = updateCustomOrderUseCase;
         this.deleteCustomOrderUseCase = deleteCustomOrderUseCase;
         this.currentUserProvider = currentUserProvider;
@@ -59,32 +60,31 @@ public class CustomOrderController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('USER','MANAGER','ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     public ResponseEntity<ListCustomOrdersUseCase.Response> listCustomOrders() {
-        UUID clientFilter = isManagerOrAdmin() ? null : currentUserProvider.currentUserId().value();
-        return ResponseEntity.ok(listCustomOrdersUseCase.execute(new ListCustomOrdersUseCase.Request(clientFilter)));
+        return ResponseEntity.ok(listCustomOrdersUseCase.execute(new ListCustomOrdersUseCase.Request()));
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ListClientCustomOrdersUseCase.Response> listMyCustomOrders() {
+        UUID clientId = currentUserProvider.currentUserId().value();
+        return ResponseEntity.ok(
+                listClientCustomOrdersUseCase.execute(new ListClientCustomOrdersUseCase.Request(clientId))
+        );
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
-    public ResponseEntity<Void> updateCustomOrder(@PathVariable UUID id, @RequestBody CustomOrderDto order) {
-        updateCustomOrderUseCase.execute(new UpdateCustomOrderUseCase.Request(order));
+    public ResponseEntity<Void> updateCustomOrder(@PathVariable UUID id, @RequestBody UpdateCustomOrderDto order) {
+        updateCustomOrderUseCase.execute(new UpdateCustomOrderUseCase.Request(id, order));
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @orderAccess.isCustomOrderOwner(#id, authentication)")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCustomOrder(@PathVariable UUID id) {
         deleteCustomOrderUseCase.execute(new DeleteCustomOrderUseCase.Request(id));
         return ResponseEntity.noContent().build();
-    }
-
-    private static boolean isManagerOrAdmin() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(a -> "ROLE_MANAGER".equals(a) || "ROLE_ADMIN".equals(a));
     }
 }

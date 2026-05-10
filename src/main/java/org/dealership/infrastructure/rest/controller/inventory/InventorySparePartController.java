@@ -26,7 +26,8 @@ public class InventorySparePartController {
             GetSparePartUseCase getSparePartUseCase,
             ListSparePartsUseCase listSparePartsUseCase,
             UpdateSparePartUseCase updateSparePartUseCase,
-            DeleteSparePartUseCase deleteSparePartUseCase) {
+            DeleteSparePartUseCase deleteSparePartUseCase
+    ) {
         this.addSparePartUseCase = addSparePartUseCase;
         this.getSparePartUseCase = getSparePartUseCase;
         this.listSparePartsUseCase = listSparePartsUseCase;
@@ -52,13 +53,12 @@ public class InventorySparePartController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateSparePart(@PathVariable UUID id, @RequestBody SparePartSummaryDto sparePart) {
-        updateSparePartUseCase.execute(new UpdateSparePartUseCase.Request(sparePart));
+    public ResponseEntity<Void> updateSparePart(@PathVariable UUID id, @RequestBody NewSparePartDto sparePart) {
+        updateSparePartUseCase.execute(new UpdateSparePartUseCase.Request(id, sparePart));
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteSparePart(@PathVariable UUID id) {
         deleteSparePartUseCase.execute(new DeleteSparePartUseCase.Request(id));
         return ResponseEntity.noContent().build();

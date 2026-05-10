@@ -61,10 +61,31 @@ class StockOrderControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    void listStockOrders_clientSeesOwn_returns200() throws Exception {
+    void listStockOrders_clientForbidden_returns403() throws Exception {
         mockMvc.perform(get("/api/stock-orders").with(asClient()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void listMyStockOrders_client_returns200WithOwnOrders() throws Exception {
+        mockMvc.perform(get("/api/stock-orders/my").with(asClient()))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.order").isArray())
                 .andExpect(jsonPath("$.order.length()").value(1));
+    }
+
+    @Test
+    void listMyStockOrders_strangerClient_returnsEmpty() throws Exception {
+        mockMvc.perform(get("/api/stock-orders/my").with(jwtUser(UUID.randomUUID(), "USER")))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.order").isArray())
+                .andExpect(jsonPath("$.order.length()").value(0));
+    }
+
+    @Test
+    void listMyStockOrders_managerForbidden_returns403() throws Exception {
+        mockMvc.perform(get("/api/stock-orders/my").with(asManager()))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -108,9 +129,9 @@ class StockOrderControllerIT extends AbstractIntegrationTest {
     void updateStockOrder_managerCanUpdate_returns200() throws Exception {
         String requestBody = String.format(
                 """
-                {"id": "%s", "clientId": "%s", "managerId": "%s", "carId": "%s", "status": {"name": "CONFIRMED"}}
+                {"clientId": "%s", "managerId": "%s", "carId": "%s", "status": {"name": "APPROVED_BY_MANAGER"}}
                 """,
-                ORDER_ID, CLIENT_ID, SEED_MANAGER_ID, CAR_ID
+                CLIENT_ID, SEED_MANAGER_ID, CAR_ID
         );
 
         mockMvc.perform(put("/api/stock-orders/{id}", ORDER_ID)
@@ -121,8 +142,14 @@ class StockOrderControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    void deleteStockOrder_owner_returns204() throws Exception {
+    void deleteStockOrder_clientForbidden_returns403() throws Exception {
         mockMvc.perform(delete("/api/stock-orders/{id}", ORDER_ID).with(asClient()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deleteStockOrder_admin_returns204() throws Exception {
+        mockMvc.perform(delete("/api/stock-orders/{id}", ORDER_ID).with(asAdmin()))
                 .andExpect(status().isNoContent());
     }
 

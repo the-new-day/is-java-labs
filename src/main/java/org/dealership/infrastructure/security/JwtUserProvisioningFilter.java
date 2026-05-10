@@ -4,9 +4,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.dealership.application.port.in.user.CreateUserUseCase;
 import org.dealership.application.port.out.persistence.UserRepository;
 import org.dealership.domain.model.id.UserId;
+import org.dealership.domain.model.user.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -21,11 +21,9 @@ import java.util.UUID;
 public class JwtUserProvisioningFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
-    private final CreateUserUseCase createUserUseCase;
 
-    public JwtUserProvisioningFilter(UserRepository userRepository, CreateUserUseCase createUserUseCase) {
+    public JwtUserProvisioningFilter(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.createUserUseCase = createUserUseCase;
     }
 
     @Override
@@ -39,7 +37,7 @@ public class JwtUserProvisioningFilter extends OncePerRequestFilter {
             UUID sub = parseUuidOrNull(jwt.getSubject());
             if (sub != null && userRepository.findById(new UserId(sub)).isEmpty()) {
                 String displayName = resolveDisplayName(jwt);
-                createUserUseCase.execute(new CreateUserUseCase.Request(sub, displayName));
+                userRepository.save(new User(new UserId(sub), displayName));
             }
         }
         filterChain.doFilter(request, response);

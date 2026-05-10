@@ -7,6 +7,7 @@ import org.dealership.application.port.in.user.GetUserUseCase;
 import org.dealership.application.port.in.user.ListUsersUseCase;
 import org.dealership.application.port.in.user.UpdateUserUseCase;
 import org.dealership.application.port.out.persistence.UserRepository;
+import org.dealership.application.port.out.security.UserIdentityProvider;
 import org.dealership.application.service.user.CreateUserInteractor;
 import org.dealership.application.service.user.DeleteUserInteractor;
 import org.dealership.application.service.user.GetUserInteractor;
@@ -26,8 +27,8 @@ public class UserUseCaseConfig {
     }
 
     @Bean
-    public CreateUserUseCase createUserUseCase(UserRepository userRepository) {
-        return new CreateUserInteractor(userRepository);
+    public CreateUserUseCase createUserUseCase(UserRepository userRepository, UserIdentityProvider userIdentityProvider) {
+        return new CreateUserInteractor(userRepository, userIdentityProvider);
     }
 
     @Bean
