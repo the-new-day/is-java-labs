@@ -1,8 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: 003-drop-user-role-column
-      author: the-new-day
-      changes:
-        - dropColumn:
-            tableName: users
-            columnName: role

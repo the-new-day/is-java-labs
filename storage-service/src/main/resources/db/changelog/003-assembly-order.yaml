@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: storage-003-assembly-order-schema
+      author: the-new-day
+      changes:
+        - createTable:
+            tableName: assembly_order
+            columns:
+              - column: { name: id, type: uuid, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: created_at, type: timestamp with time zone, constraints: { nullable: false } }
+              - column: { name: updated_at, type: timestamp with time zone, constraints: { nullable: false } }
+              - column: { name: removed, type: boolean, defaultValueBoolean: false, constraints: { nullable: false } }
+              - column: { name: source_order_id, type: uuid, constraints: { nullable: false } }
+              - column: { name: source_order_type, type: varchar(40), constraints: { nullable: false } }
+              - column: { name: car_id, type: uuid }
+              - column: { name: car_model_id, type: uuid }
+              - column: { name: assigned_worker_id, type: uuid }
+              - column: { name: status, type: varchar(40), constraints: { nullable: false } }
+
+        - createTable:
+            tableName: assembly_order_parts
+            columns:
+              - column: { name: assembly_order_id, type: uuid, constraints: { nullable: false } }
+              - column: { name: part_id, type: uuid, constraints: { nullable: false } }
+              - column: { name: quantity, type: int, constraints: { nullable: false } }
+
+        - addPrimaryKey:
+            constraintName: pk_assembly_order_parts
+            tableName: assembly_order_parts
+            columnNames: assembly_order_id, part_id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_assembly_order_parts_order
+            baseTableName: assembly_order_parts
+            baseColumnNames: assembly_order_id
+            referencedTableName: assembly_order
+            referencedColumnNames: id
+
+  - changeSet:
+      id: storage-003-assembly-order-indexes
+      author: the-new-day
+      changes:
+        - createIndex:
+            indexName: idx_assembly_order_source_order
+            tableName: assembly_order
+            columns:
+              - column: { name: source_order_id }
+        - createIndex:
+            indexName: idx_assembly_order_car_id
+            tableName: assembly_order
+            columns:
+              - column: { name: car_id }
+        - createIndex:
+            indexName: idx_assembly_order_car_model_id
+            tableName: assembly_order
+            columns:
+              - column: { name: car_model_id }
