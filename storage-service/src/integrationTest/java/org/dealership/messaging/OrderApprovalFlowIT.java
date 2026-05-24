@@ -1,8 +1,6 @@
 package org.dealership.messaging;
 
 import org.dealership.AbstractControllerIT;
-import org.dealership.events.OrderApprovedEvent;
-import org.dealership.events.OrderRejectedEvent;
 import org.dealership.events.OrderSentForApprovalEvent;
 import org.dealership.events.PartRequirement;
 import org.dealership.events.Topics;
@@ -10,21 +8,16 @@ import org.dealership.infrastructure.persistence.jpa.entity.OutboxEventJpaEntity
 import org.dealership.infrastructure.persistence.jpa.repository.OutboxEventJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.time.Duration.ofSeconds;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
-@Import(OrderApprovalFlowIT.TestKafkaConsumer.class)
 class OrderApprovalFlowIT extends AbstractControllerIT {
 
     static final UUID SEED_CAR_ID = UUID.fromString("00000000-0000-0000-0000-000000000501");
@@ -161,21 +154,5 @@ class OrderApprovalFlowIT extends AbstractControllerIT {
                 assertThat(testConsumer.rejected)
                         .anyMatch(e -> e.orderId().equals(orderId) && e.traceId().equals(traceId))
         );
-    }
-
-    @Component
-    static class TestKafkaConsumer {
-        final List<OrderRejectedEvent> rejected = new CopyOnWriteArrayList<>();
-        final List<OrderApprovedEvent> approved = new CopyOnWriteArrayList<>();
-
-        @KafkaListener(topics = Topics.ORDER_REJECTED, groupId = "integration-test-listener-rejected")
-        void onRejected(OrderRejectedEvent event) {
-            rejected.add(event);
-        }
-
-        @KafkaListener(topics = Topics.ORDER_APPROVED, groupId = "integration-test-listener-approved")
-        void onApproved(OrderApprovedEvent event) {
-            approved.add(event);
-        }
     }
 }

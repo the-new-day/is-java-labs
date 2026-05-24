@@ -34,7 +34,16 @@ spring:
 server:
   port: 8081
 
+grpc:
+  client:
+    storage-service:
+      address: 'static://${STORAGE_GRPC_HOST:localhost}:${STORAGE_GRPC_PORT:9090}'
+      negotiation-type: plaintext
+
 dealership:
+  grpc:
+    client:
+      timeout-ms: ${STORAGE_GRPC_TIMEOUT_MS:5000}
   security:
     keycloak:
       server-url: ${KEYCLOAK_SERVER_URL:http://localhost:8080}

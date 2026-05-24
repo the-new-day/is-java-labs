@@ -46,6 +46,8 @@ public abstract class AbstractControllerIT {
         registry.add("spring.datasource.password", postgres::getPassword);
         registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri",
                 () -> "http://localhost/integration-test");
+        registry.add("grpc.client.storage-service.address", () -> "static://localhost:19090");
+        registry.add("grpc.client.storage-service.negotiation-type", () -> "plaintext");
     }
 
     protected static RequestPostProcessor jwtUser(UUID id, String... roles) {

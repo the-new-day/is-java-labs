@@ -8,6 +8,8 @@ COPY settings.gradle .
 COPY order-service/build.gradle order-service/build.gradle
 COPY order-service/src order-service/src
 
+RUN gradle :order-service:generateProto --no-daemon || true
+RUN find /root/.gradle -name "*.exe" -exec chmod +x {} \;
 RUN gradle :order-service:bootJar --no-daemon -x test
 
 FROM eclipse-temurin:21-jre-alpine
