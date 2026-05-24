@@ -1,0 +1,187 @@
+package org.dealership.application.service;
+
+import org.dealership.application.port.in.carcatalog.dto.BrandDto;
+import org.dealership.application.port.in.carcatalog.dto.CarFilterDto;
+import org.dealership.application.port.in.common.dto.*;
+import org.dealership.domain.model.enums.*;
+import org.dealership.domain.model.id.*;
+import org.dealership.application.port.in.customorder.dto.CustomOrderDto;
+import org.dealership.application.port.in.customorder.dto.CustomOrderStatusDto;
+import org.dealership.application.port.in.stockorder.dto.StockOrderDto;
+import org.dealership.application.port.in.stockorder.dto.StockOrderStatusDto;
+import org.dealership.application.port.in.testdrive.dto.TestDriveRequestDto;
+import org.dealership.application.port.in.user.dto.UserDto;
+import org.dealership.domain.model.car.Brand;
+import org.dealership.domain.model.car.Car;
+import org.dealership.domain.model.car.CarModel;
+import org.dealership.domain.model.configuration.ComponentVariantSelection;
+import org.dealership.domain.model.configuration.Configuration;
+import org.dealership.domain.model.order.CustomCarOrder;
+import org.dealership.domain.model.order.StockCarOrder;
+import org.dealership.domain.model.order.state.CustomCarOrderStatus;
+import org.dealership.domain.model.order.state.StockCarOrderStatus;
+import org.dealership.domain.model.testdrive.TestDriveRequest;
+import org.dealership.domain.model.vo.Money;
+import org.dealership.domain.model.vo.VinNumber;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+public final class ServiceTestData {
+    private ServiceTestData() {
+    }
+
+    public static Brand brand(UUID id) {
+        return new Brand(new BrandId(id), "Brand");
+    }
+
+    public static CarModel carModel(UUID modelId, Brand brand) {
+        return new CarModel(
+                new CarModelId(modelId),
+                brand,
+                "Model",
+                new Money(BigDecimal.valueOf(10_000)),
+                CarBodyType.SEDAN,
+                FuelType.PETROL,
+                DriveType.REAR,
+                2.0,
+                200,
+                TransmissionType.MANUAL,
+                ComponentVariantSelection.empty(),
+                Set.of()
+        );
+    }
+
+    public static Configuration configuration(CarModel model) {
+        return new Configuration(model, ComponentVariantSelection.empty());
+    }
+
+    public static Car car(UUID carId, CarModel model) {
+        return new Car(
+                new CarId(carId),
+                new VinNumber("WBA12345678901234"),
+                configuration(model),
+                Color.BLACK,
+                true
+        );
+    }
+
+    public static BrandDto brandDto(UUID id) {
+        return new BrandDto(id, "Brand");
+    }
+
+    public static CarModelDto carModelDto(UUID id) {
+        return new CarModelDto(
+                id,
+                brandDto(UUID.randomUUID()),
+                "Model",
+                new MoneyDto(BigDecimal.valueOf(10_000)),
+                new CarBodyTypeDto(CarBodyType.SEDAN.name()),
+                new FuelTypeDto(FuelType.PETROL.name()),
+                new DriveTypeDto(DriveType.REAR.name()),
+                2.0,
+                200,
+                new TransmissionTypeDto(TransmissionType.MANUAL.name()),
+                new ComponentVariantSelectionDto(Map.of()),
+                Set.of()
+        );
+    }
+
+    public static ConfigurationDto configurationDto(UUID modelId) {
+        return new ConfigurationDto(carModelDto(modelId), new ComponentVariantSelectionDto(Map.of()));
+    }
+
+    public static CarDetailsDto carDetailsDto(UUID carId, UUID modelId, boolean testDriveAvailable) {
+        return new CarDetailsDto(
+                carId,
+                configurationDto(modelId),
+                new MoneyDto(BigDecimal.valueOf(10_000)),
+                new ColorDto(Color.BLACK.name()),
+                testDriveAvailable
+        );
+    }
+
+    public static CarFilterDto carFilterDto(UUID brandId, UUID modelId) {
+        return new CarFilterDto(
+                new MoneyDto(BigDecimal.valueOf(5_000)),
+                new MoneyDto(BigDecimal.valueOf(20_000)),
+                brandId,
+                modelId,
+                new CarBodyTypeDto(CarBodyType.SEDAN.name()),
+                new FuelTypeDto(FuelType.PETROL.name()),
+                150,
+                250,
+                1.5,
+                3.0,
+                new TransmissionTypeDto(TransmissionType.MANUAL.name()),
+                new DriveTypeDto(DriveType.REAR.name()),
+                new ColorDto(Color.BLACK.name())
+        );
+    }
+
+    public static StockOrderDto stockOrderDto(
+            UUID orderId,
+            UUID clientId,
+            UUID managerId,
+            UUID carId,
+            String status
+    ) {
+        return new StockOrderDto(orderId, clientId, managerId, carId, new StockOrderStatusDto(status));
+    }
+
+    public static CustomOrderDto customOrderDto(
+            UUID orderId,
+            UUID clientId,
+            UUID managerId,
+            UUID modelId,
+            String status
+    ) {
+        return new CustomOrderDto(orderId, clientId, managerId, configurationDto(modelId), new CustomOrderStatusDto(status));
+    }
+
+    public static TestDriveRequestDto testDriveRequestDto(
+            UUID id,
+            UUID clientId,
+            UUID carId,
+            LocalDateTime startsAt
+    ) {
+        return new TestDriveRequestDto(id, clientId, carId, startsAt);
+    }
+
+    public static UserDto userDto(UUID id, String fullName) {
+        return new UserDto(id, fullName);
+    }
+
+    public static StockCarOrder stockOrder(UUID orderId, UUID clientId, UUID managerId, UUID carId) {
+        return new StockCarOrder(
+                new OrderId(orderId),
+                new UserId(clientId),
+                new UserId(managerId),
+                new CarId(carId),
+                StockCarOrderStatus.PLACED
+        );
+    }
+
+    public static CustomCarOrder customOrder(UUID orderId, UUID clientId, UUID managerId, CarModel model) {
+        return new CustomCarOrder(
+                new OrderId(orderId),
+                new UserId(clientId),
+                new UserId(managerId),
+                configuration(model),
+                CustomCarOrderStatus.PLACED
+        );
+    }
+
+    public static TestDriveRequest testDriveRequest(UUID id, UUID clientId, UUID carId, LocalDateTime startsAt) {
+        return new TestDriveRequest(
+                new TestDriveRequestId(id),
+                new UserId(clientId),
+                new CarId(carId),
+                startsAt
+        );
+    }
+
+}
