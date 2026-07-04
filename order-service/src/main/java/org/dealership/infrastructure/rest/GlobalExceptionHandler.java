@@ -3,6 +3,7 @@ package org.dealership.infrastructure.rest;
 import org.dealership.domain.exception.DomainValidationException;
 import org.dealership.domain.exception.EntityNotFoundException;
 import org.dealership.domain.exception.IncompatibleComponentException;
+import org.dealership.domain.exception.StorageServiceUnavailableException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(StorageServiceUnavailableException.class)
+    public ProblemDetail handleStorageServiceUnavailable(StorageServiceUnavailableException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                ex.getMessage()
+        );
+        problem.setTitle("Storage Service Unavailable");
+        return problem;
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ProblemDetail handleEntityNotFound(EntityNotFoundException ex) {
