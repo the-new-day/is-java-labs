@@ -1,0 +1,102 @@
+{
+  "realm": "dealership",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "accessTokenLifespan": 3600,
+  "roles": {
+    "realm": [
+      { "name": "USER", "description": "Regular client" },
+      { "name": "MANAGER", "description": "Sales manager" },
+      { "name": "WAREHOUSE_ADMIN", "description": "Warehouse administrator" },
+      { "name": "ADMIN", "description": "System administrator" }
+    ]
+  },
+  "users": [
+    {
+      "id": "00000000-0000-0000-0000-000000000301",
+      "username": "ivan",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Ivan",
+      "lastName": "Petrov",
+      "email": "ivan@example.com",
+      "credentials": [{ "type": "password", "value": "ivan", "temporary": false }],
+      "realmRoles": ["USER"]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000302",
+      "username": "maria",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Maria",
+      "lastName": "Manager",
+      "email": "maria@example.com",
+      "credentials": [{ "type": "password", "value": "maria", "temporary": false }],
+      "realmRoles": ["MANAGER"]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000303",
+      "username": "oleg",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Oleg",
+      "lastName": "Warehouse",
+      "email": "oleg@example.com",
+      "credentials": [{ "type": "password", "value": "oleg", "temporary": false }],
+      "realmRoles": ["WAREHOUSE_ADMIN"]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000304",
+      "username": "anna",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Anna",
+      "lastName": "Admin",
+      "email": "anna@example.com",
+      "credentials": [{ "type": "password", "value": "anna", "temporary": false }],
+      "realmRoles": ["ADMIN"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "dealership-app",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["http://localhost:8080/*"],
+      "webOrigins": ["*"],
+      "protocol": "openid-connect",
+      "attributes": {
+        "post.logout.redirect.uris": "+"
+      },
+      "fullScopeAllowed": true
+    },
+    {
+      "clientId": "dealership-admin",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "dealership-admin-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "protocol": "openid-connect",
+      "fullScopeAllowed": true
+    }
+  ],
+  "scopeMappings": [],
+  "clientScopeMappings": {
+    "realm-management": [
+      {
+        "client": "dealership-admin",
+        "roles": ["view-users", "query-users", "view-realm"]
+      }
+    ]
+  }
+}

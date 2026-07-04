@@ -1,113 +1,116 @@
 plugins {
-    id 'java'
-    id 'idea'
-    id 'jacoco'
-    id 'org.springframework.boot' version '3.2.4'
-    id 'io.spring.dependency-management' version '1.1.4'
-}
-
-group = 'org.dealership'
-version = '1.0-SNAPSHOT'
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-repositories {
-    mavenCentral()
+    id 'org.springframework.boot' version '3.2.4' apply false
+    id 'io.spring.dependency-management' version '1.1.4' apply false
 }
 
 ext {
     mapstructVersion = '1.5.5.Final'
     testcontainersVersion = '2.0.4'
+    keycloakAdminVersion = '24.0.5'
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'jacoco'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-    implementation 'org.postgresql:postgresql'
+    group = 'org.dealership'
+    version = '1.0-SNAPSHOT'
 
-    implementation 'org.liquibase:liquibase-core'
-
-    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mockito:mockito-core:5.12.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
-
-    testImplementation "org.testcontainers:testcontainers:${testcontainersVersion}"
-    testImplementation "org.testcontainers:testcontainers-junit-jupiter:${testcontainersVersion}"
-    testImplementation "org.testcontainers:testcontainers-postgresql:${testcontainersVersion}"
-
-    testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.13'
-}
-
-configurations {
-    integrationTestImplementation.extendsFrom testImplementation
-    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
-    integrationTestRuntimeOnly.exclude group: 'org.slf4j', module: 'slf4j-simple'
-}
-
-sourceSets {
-    integrationTest {
-        java.srcDir file('src/integrationTest/java')
-        resources.srcDir file('src/integrationTest/resources')
-        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
-        runtimeClasspath += output + compileClasspath
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
     }
-}
 
-idea {
-    module {
-        testSources.from sourceSets.integrationTest.java.srcDirs
-        testResources.from sourceSets.integrationTest.resources.srcDirs
+    repositories {
+        mavenCentral()
     }
-}
 
-tasks.register('integrationTest', Test) {
-    description = 'Runs integration tests.'
-    group = 'verification'
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-    useJUnitPlatform()
-    shouldRunAfter test
-    testLogging {
-        events 'passed', 'skipped', 'failed'
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
     }
-}
 
-tasks.named('processIntegrationTestResources') {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events 'passed', 'skipped', 'failed'
+    test {
+        useJUnitPlatform()
     }
-}
 
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.70
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    minimum = 0.70
+                }
             }
         }
     }
-}
 
-tasks.named('check') {
-    dependsOn tasks.named('jacocoTestCoverageVerification')
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+        implementation "org.keycloak:keycloak-admin-client:${keycloakAdminVersion}"
+        implementation 'org.postgresql:postgresql'
+        implementation 'org.liquibase:liquibase-core'
+        implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+        annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+        implementation 'org.springframework.kafka:spring-kafka'
+
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+        testImplementation 'org.springframework.kafka:spring-kafka-test'
+        testImplementation 'org.springframework.security:spring-security-test'
+        testImplementation 'org.mockito:mockito-core:5.12.0'
+        testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+        testImplementation "org.testcontainers:testcontainers:${testcontainersVersion}"
+        testImplementation "org.testcontainers:testcontainers-junit-jupiter:${testcontainersVersion}"
+        testImplementation "org.testcontainers:testcontainers-postgresql:${testcontainersVersion}"
+        testImplementation "org.testcontainers:testcontainers-kafka:${testcontainersVersion}"
+        testImplementation 'org.awaitility:awaitility:4.2.1'
+        testImplementation 'org.apache.commons:commons-lang3:3.14.0'
+        testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.13'
+    }
+
+    configurations {
+        integrationTestImplementation.extendsFrom testImplementation
+        integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
+        integrationTestRuntimeOnly.exclude group: 'org.slf4j', module: 'slf4j-simple'
+    }
+
+    sourceSets {
+        integrationTest {
+            java.srcDir file('src/integrationTest/java')
+            resources.srcDir file('src/integrationTest/resources')
+            compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+            runtimeClasspath += output + compileClasspath
+        }
+    }
+
+    idea {
+        module {
+            testSources.from sourceSets.integrationTest.java.srcDirs
+            testResources.from sourceSets.integrationTest.resources.srcDirs
+        }
+    }
+
+    tasks.register('integrationTest', Test) {
+        description = 'Runs integration tests.'
+        group = 'verification'
+        testClassesDirs = sourceSets.integrationTest.output.classesDirs
+        classpath = sourceSets.integrationTest.runtimeClasspath
+        useJUnitPlatform()
+        shouldRunAfter test
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+        }
+    }
+
+    tasks.named('processIntegrationTestResources') {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }

@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: storage-004-outbox-event
+      author: the-new-day
+      changes:
+        - createTable:
+            tableName: outbox_event
+            columns:
+              - column: { name: id, type: uuid, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: aggregate_type, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: aggregate_id, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: event_type, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: payload, type: text, constraints: { nullable: false } }
+              - column: { name: created_at, type: timestamp with time zone, constraints: { nullable: false }, defaultValueComputed: now() }
+              - column: { name: sent, type: boolean, constraints: { nullable: false }, defaultValueBoolean: false }
+        - createIndex:
+            indexName: idx_outbox_event_sent_created
+            tableName: outbox_event
+            columns:
+              - column: { name: sent }
+              - column: { name: created_at }
+
+  - changeSet:
+      id: storage-004-inbox-message
+      author: the-new-day
+      changes:
+        - createTable:
+            tableName: inbox_message
+            columns:
+              - column: { name: message_id, type: uuid, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: received_at, type: timestamp with time zone, constraints: { nullable: false }, defaultValueComputed: now() }
+              - column: { name: event_type, type: varchar(255), constraints: { nullable: false } }
+              - column: { name: order_id, type: varchar(255), constraints: { nullable: false } }

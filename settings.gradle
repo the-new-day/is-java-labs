@@ -1,1 +1,3 @@
 rootProject.name = 'Dealership'
+include 'order-service'
+include 'storage-service'
